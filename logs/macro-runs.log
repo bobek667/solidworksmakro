@@ -345,3 +345,31 @@
 [2026-03-24 19:54:03] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
 [2026-03-24 19:54:04] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
 [2026-03-24 19:54:05] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 19:55:35] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 19:55:51] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:55:52] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 19:55:53] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 20:00:38] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 20:00:50] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 20:00:51] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 20:00:52] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 20:01:04] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 20:01:52] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 20:01:53] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 20:01:54] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 20:02:09] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 20:02:10] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 20:02:11] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 20:02:20] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 20:02:21] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 20:02:22] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 20:02:29] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 20:02:51] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 20:04:43] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 20:04:44] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 20:04:45] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 20:04:56] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 20:04:56] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 20:04:57] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 20:05:14] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 20:14:03] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.

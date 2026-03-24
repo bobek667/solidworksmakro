@@ -33,9 +33,9 @@
       "description": "Czyta wczesniej zapisane pliki i na podstawie dopisanych przyrostkow rozpoznaje, czy ma utworzyc wyjsciowy PDF czy DXF.",
       "category": "Moje makra / Krok 3",
       "launchMode": "attached_or_start",
-      "requiresOpenDoc": true,
-      "requirements": "Najlepiej uruchamiac po wykonaniu makra zapisu czesci i makra tworzenia rysunkow, kiedy pliki maja juz odpowiednie dopiski i sa gotowe do rozpoznania.",
-      "steps": "Najlepsza kolejnosc pracy:\n1. Najpierw wykonaj zapis czesci oraz tworzenie rysunkow.\n2. Otworz odpowiedni plik lub uruchom makro na przygotowanych danych.\n3. Kliknij Uruchom w launcherze.\n4. Makro odczyta przyrostki i rozpozna, czy dla danego pliku ma utworzyc PDF czy DXF.\n5. Zapisze gotowe pliki wyjsciowe PDF i DXF.",
+      "requiresOpenDoc": false,
+      "requirements": "Najlepiej uruchamiac po wykonaniu makra zapisu czesci i makra tworzenia rysunkow, kiedy pliki maja juz odpowiednie dopiski i sa gotowe do rozpoznania. Otwarcie projektu w SolidWorks nie jest wymagane przed startem.",
+      "steps": "Najlepsza kolejnosc pracy:\n1. Najpierw wykonaj zapis czesci oraz tworzenie rysunkow.\n2. Kliknij Uruchom w launcherze.\n3. Wskaz przygotowane pliki lub folder, jesli makro o to poprosi.\n4. Makro odczyta przyrostki i rozpozna, czy dla danego pliku ma utworzyc PDF czy DXF.\n5. Zapisze gotowe pliki wyjsciowe PDF i DXF.",
       "procedure": "main",
       "module": "V1__export_do_pdf_i_dxf_",
       "path": ".\\macros\\V1 - export do pdf i dxf z rozpoznaniem.swp"
@@ -49,10 +49,8 @@
       "requiredDocType": "assembly",
       "requirements": "Otworz zlozenie z elementami blaszanymi. Makro utworzy folder DXF przy pliku zlozenia.",
       "steps": "1. Otworz zlozenie z elementami blaszanymi.\n2. Kliknij Uruchom w launcherze.\n3. Makro zapisze rozwiniecia do folderu DXF obok zlozenia.",
-      "procedure": "",
-      "module": "",
-      "origin": "GitHub: Johanss-on/Assem2DXF",
-      "sourceUrl": "https://github.com/Johanss-on/Assem2DXF",
+      "procedure": "main",
+      "module": "Module1",
       "path": ".\\macros\\Assem 2 DXF v3 Macro.swp"
     },
     {
@@ -64,10 +62,8 @@
       "requiredDocType": "part",
       "requirements": "Otworz czesc, dla ktorej chcesz uzupelnic wymiary gabarytowe wlasciwosciami.",
       "steps": "1. Otworz czesc w SolidWorks.\n2. Kliknij Uruchom w launcherze.\n3. Odpowiedz na pytania makra, jesli sie pojawia.\n4. Makro doda bounding box i uzupelni podstawowe wlasciwosci wymiarowe.",
-      "procedure": "",
-      "module": "",
-      "origin": "GitHub: edgarev/SolidWorks-Macros",
-      "sourceUrl": "https://github.com/edgarev/SolidWorks-Macros",
+      "procedure": "main",
+      "module": "Module1",
       "path": ".\\macros\\AddBoundingBox.swp"
     },
     {
@@ -78,10 +74,8 @@
       "requiresOpenDoc": true,
       "requirements": "Otworz czesc albo zlozenie, ktore chcesz wyeksportowac do OBJ.",
       "steps": "1. Otworz model w SolidWorks.\n2. Kliknij Uruchom w launcherze.\n3. W oknie makra ustaw opcje eksportu OBJ.\n4. Makro zapisze pliki OBJ i MTL w osobnym folderze.",
-      "procedure": "",
-      "module": "",
-      "origin": "GitHub: Aeroanion/Free-Solidworks-OBJ-Exporter",
-      "sourceUrl": "https://github.com/Aeroanion/Free-Solidworks-OBJ-Exporter",
+      "procedure": "main",
+      "module": "Module1",
       "path": ".\\macros\\Free_SolidWorks_OBJ_Exporter.swp"
     },
     {
@@ -93,10 +87,8 @@
       "requiredDocType": "part",
       "requirements": "Otworz czesc i aktywny szkic. Makro moze wymagac wczesniejszego ustawienia sciezki do pliku CSV w swoim kodzie.",
       "steps": "1. Otworz czesc i wejdz do szkicu.\n2. Kliknij Uruchom w launcherze.\n3. Jesli trzeba, dostosuj wewnatrz makra sciezke do pliku z punktami.\n4. Makro utworzy spline z danych CSV/TXT.",
-      "procedure": "",
-      "module": "",
-      "origin": "GitHub: VictorLiotti/solidworks-spline-macro",
-      "sourceUrl": "https://github.com/VictorLiotti/solidworks-spline-macro",
+      "procedure": "main",
+      "module": "Module1",
       "path": ".\\macros\\MacroSpline.swp"
     }
   ]
