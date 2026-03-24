@@ -287,9 +287,9 @@ function Get-MacroGlyph {
     $category = ([string]$Macro.category).ToLowerInvariant()
     $name = ([string]$Macro.name).ToLowerInvariant()
 
-    if ($name.Contains("moje: rysunki")) { return "PDF" }
-    if ($name.Contains("moje: zapis")) { return "NUM" }
-    if ($name.Contains("moje: export z rozpoznaniem")) { return "SEN" }
+    if ($name.Contains("moje: 1. zapis")) { return "ZAP" }
+    if ($name.Contains("moje: 2. tworzenie rysunkow")) { return "RYS" }
+    if ($name.Contains("moje: 3. koncowy export")) { return "OUT" }
     if ($name.Contains("pobrane:")) { return "DL" }
     if ($name.Contains("bom")) { return "BOM" }
     if ($name.Contains("dxf")) { return "DXF" }
@@ -1026,7 +1026,7 @@ try {
     $listBox.BackColor = $script:Colors.Surface; $listBox.ForeColor = $script:Colors.Text
     $listBox.Font = New-AppFont -Size 10; $listBox.IntegralHeight = $false; $listBox.Anchor = "Top,Bottom,Left,Right"
     $listBox.DrawMode = [System.Windows.Forms.DrawMode]::OwnerDrawFixed
-    $listBox.ItemHeight = 82
+    $listBox.ItemHeight = 108
 
     $rightPanel = New-Object System.Windows.Forms.Panel
     $rightPanel.Left = 380; $rightPanel.Top = 114; $rightPanel.Width = 658; $rightPanel.Height = 500
@@ -1037,17 +1037,17 @@ try {
     $detailsTitle.Font = New-AppFont -Size 12 -Style Bold
 
     $detailsBox = New-Object System.Windows.Forms.TextBox
-    $detailsBox.Left = 20; $detailsBox.Top = 54; $detailsBox.Width = 618; $detailsBox.Height = 270
+    $detailsBox.Left = 20; $detailsBox.Top = 54; $detailsBox.Width = 618; $detailsBox.Height = 300
     $detailsBox.Multiline = $true; $detailsBox.ReadOnly = $true; $detailsBox.ScrollBars = "Vertical"
     $detailsBox.BackColor = $script:Colors.SurfaceAlt; $detailsBox.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
     $detailsBox.Font = New-AppFont -Size 9.5; $detailsBox.Anchor = "Top,Bottom,Left,Right"
 
     $chkVisible = New-Object System.Windows.Forms.CheckBox
-    $chkVisible.Left = 20; $chkVisible.Top = 338; $chkVisible.Width = 280
+    $chkVisible.Left = 20; $chkVisible.Top = 370; $chkVisible.Width = 280
     $chkVisible.Text = "Pokazuj SolidWorks przy uruchamianiu"; $chkVisible.Checked = [bool]$config.solidworks.visible; $chkVisible.Anchor = "Left,Bottom"
 
     $hintLabel = New-Object System.Windows.Forms.Label
-    $hintLabel.Left = 20; $hintLabel.Top = 366; $hintLabel.Width = 600; $hintLabel.Height = 52
+    $hintLabel.Left = 20; $hintLabel.Top = 398; $hintLabel.Width = 600; $hintLabel.Height = 52
     $hintLabel.Text = "Tryby: attached_only = tylko na juz otwartym SolidWorks, attached_or_start = podlacz lub uruchom, startup_switch = awaryjnie przez okno uruchamiania makra."
     $hintLabel.ForeColor = $script:Colors.Muted; $hintLabel.Font = New-AppFont -Size 8.5
 
@@ -1080,7 +1080,7 @@ try {
     $btnDelete.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Error); $btnDelete.Anchor = "Left,Bottom"
 
     $btnSaveConfig = New-Object System.Windows.Forms.Button
-    $btnSaveConfig.Text = "Zapisz konfiguracje"; $btnSaveConfig.Left = 460; $btnSaveConfig.Top = 416; $btnSaveConfig.Width = 178; $btnSaveConfig.Height = 42
+    $btnSaveConfig.Text = "Zapisz konfiguracje"; $btnSaveConfig.Left = 460; $btnSaveConfig.Top = 448; $btnSaveConfig.Width = 178; $btnSaveConfig.Height = 42
     $btnSaveConfig.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Question); $btnSaveConfig.Anchor = "Right,Bottom"
 
     Set-PrimaryButtonStyle -Button $btnRun
@@ -1218,6 +1218,14 @@ try {
             }
         }
 
+        if (([string]$macro.name).ToLowerInvariant().StartsWith("moje:")) {
+            $lines += ""
+            $lines += "Najlepsza kolejnosc pracy:"
+            $lines += "1. Zapis czesci z wirtualnego zlozenia"
+            $lines += "2. Tworzenie rysunkow z zapisanych SLDPRT"
+            $lines += "3. Koncowy export PDF i DXF z rozpoznaniem"
+        }
+
         $detailsBox.Text = ($lines -join [Environment]::NewLine)
     }
 
@@ -1259,28 +1267,33 @@ try {
         $glyphY = [single]($iconRect.Top + (($iconRect.Height - $glyphSize.Height) / 2))
         $e.Graphics.DrawString($glyph, $glyphFont, $glyphBrush, $glyphX, $glyphY)
 
-        $titleFont = New-AppFont -Size 10.5 -Style Bold
-        $bodyFont = New-AppFont -Size 8.6
+        $titleFont = New-AppFont -Size 10 -Style Bold
+        $bodyFont = New-AppFont -Size 8.5
         $metaFont = New-AppFont -Size 8 -Style Bold
         $textBrush = New-Object System.Drawing.SolidBrush($script:Colors.Text)
         $mutedBrush = New-Object System.Drawing.SolidBrush($script:Colors.Muted)
 
         $titleX = $iconRect.Right + 12
         $titleY = $cardRect.Top + 10
-        $e.Graphics.DrawString([string]$macro.name, $titleFont, $textBrush, $titleX, $titleY)
+        $titleRect = New-Object System.Drawing.RectangleF ([single]$titleX), ([single]$titleY), ([single]($cardRect.Width - ($titleX - $cardRect.Left) - 12)), 34
+        $titleFormat = New-Object System.Drawing.StringFormat
+        $titleFormat.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
+        $e.Graphics.DrawString([string]$macro.name, $titleFont, $textBrush, $titleRect, $titleFormat)
 
         $chipText = if ([string]::IsNullOrWhiteSpace([string]$macro.category)) { "Makro" } else { [string]$macro.category }
         $chipSize = $e.Graphics.MeasureString($chipText, $metaFont)
-        $chipRect = New-Object System.Drawing.RectangleF ($titleX), ($cardRect.Top + 32), ([Math]::Min(110, $chipSize.Width + 16)), 18
+        $chipRect = New-Object System.Drawing.RectangleF ([single]$titleX), ([single]($cardRect.Top + 42)), ([single]([Math]::Min(170, $chipSize.Width + 16))), 18
         $chipBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(20, $accent))
         $chipBorderPen = New-Object System.Drawing.Pen($accent)
         $e.Graphics.FillRectangle($chipBrush, $chipRect)
         $e.Graphics.DrawRectangle($chipBorderPen, [System.Drawing.Rectangle]::Round($chipRect))
-        $e.Graphics.DrawString($chipText, $metaFont, (New-Object System.Drawing.SolidBrush($accent)), $chipRect.X + 8, $chipRect.Y + 2)
+        $chipTextBrush = New-Object System.Drawing.SolidBrush($accent)
+        $e.Graphics.DrawString($chipText, $metaFont, $chipTextBrush, [single]($chipRect.X + 8), [single]($chipRect.Y + 2))
 
-        $description = [string]$macro.description
-        if ($description.Length -gt 58) { $description = $description.Substring(0, 55) + "..." }
-        $e.Graphics.DrawString($description, $bodyFont, $mutedBrush, $titleX, ($cardRect.Top + 54))
+        $descriptionRect = New-Object System.Drawing.RectangleF ([single]$titleX), ([single]($cardRect.Top + 64)), ([single]($cardRect.Width - ($titleX - $cardRect.Left) - 12)), 28
+        $descriptionFormat = New-Object System.Drawing.StringFormat
+        $descriptionFormat.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
+        $e.Graphics.DrawString([string]$macro.description, $bodyFont, $mutedBrush, $descriptionRect, $descriptionFormat)
 
         $cardBrush.Dispose()
         $borderPen.Dispose()
@@ -1290,6 +1303,9 @@ try {
         $mutedBrush.Dispose()
         $chipBrush.Dispose()
         $chipBorderPen.Dispose()
+        $chipTextBrush.Dispose()
+        $titleFormat.Dispose()
+        $descriptionFormat.Dispose()
         $glyphFont.Dispose()
         $titleFont.Dispose()
         $bodyFont.Dispose()
