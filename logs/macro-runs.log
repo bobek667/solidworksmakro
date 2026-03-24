@@ -308,3 +308,40 @@
 [2026-03-24 18:42:42] Moje: Export z rozpoznaniem - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
 [2026-03-24 18:42:42] Moje: Export z rozpoznaniem - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
 [2026-03-24 18:42:43] Moje: Export z rozpoznaniem - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 19:49:51] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 19:50:14] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:50:14] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 19:50:16] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 19:50:26] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:50:27] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 19:50:28] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 19:50:34] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:50:34] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 19:50:36] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 19:50:40] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:50:41] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 19:50:42] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 19:50:50] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:50:51] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 19:50:52] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 19:51:02] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:51:03] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 19:51:04] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 19:53:15] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:53:16] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 19:53:17] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 19:53:22] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:53:23] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 19:53:24] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 19:53:31] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:53:32] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 19:53:33] Launcher - Status: trace - Details: Using short Tools menu path for empty SolidWorks.
+[2026-03-24 19:53:42] Moje: 1. Zapis czesci z wirtualnego zlozenia - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:53:43] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 19:53:44] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 19:53:55] Moje: 2. Tworzenie rysunkow z zapisanych SLDPRT - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:53:56] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 19:53:57] Launcher - Status: trace - Details: Using long Tools menu path for open document.
+[2026-03-24 19:54:03] Moje: 3. Koncowy export PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 19:54:04] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 19:54:05] Launcher - Status: trace - Details: Using long Tools menu path for open document.

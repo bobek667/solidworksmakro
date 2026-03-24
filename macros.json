@@ -5,13 +5,13 @@
   "macros": [
     {
       "name": "Moje: 1. Zapis czesci z wirtualnego zlozenia",
-      "description": "Z otwartego zlozenia wyciaga wszystkie czesci wirtualne, pomija toolbox i elementy wykluczone z BOM, a potem zapisuje je jako osobne pliki z numeracja i przedrostkiem.",
+      "description": "Z otwartego zlozenia wyciaga czesci wirtualne, pomija elementy Toolbox i wykluczone z BOM, nadaje przedrostek z numeracja per typ i zapisuje pliki do osobnych folderow. Automatycznie rozpoznaje blachy oraz profile/weldment. Dostepne typy zapisu: B = Blachy, F = Frezowane, P = Profile, T = Podkladki, S = Spawane, Z = Zakupowe, INNE = pozostale.",
       "category": "Moje makra / Krok 1",
       "launchMode": "attached_or_start",
       "requiresOpenDoc": true,
       "requiredDocType": "assembly",
-      "requirements": "Musisz miec otwarte zlozenie z czesciami wirtualnymi. Makro pomija elementy toolbox i elementy wykluczone z BOM.",
-      "steps": "1. Otworz zlozenie w SolidWorks.\n2. Kliknij Uruchom w launcherze.\n3. Makro znajdzie czesci wirtualne i pominie toolbox oraz pozycje wykluczone z BOM.\n4. Makro rozpozna czy element jest czescia, arkuszem czy weldmentem.\n5. Zapisze kazdy element jako osobny plik z odpowiednim przedrostkiem i numeracja.",
+      "requirements": "Wymaga otwartego zlozenia z czesciami wirtualnymi. Makro pomija Toolbox i elementy wykluczone z BOM. Automatycznie wykrywa blachy oraz profile/weldment, a pozostale typy mozesz sklasyfikowac wedlug dostepnych kategorii B, F, P, T, S, Z oraz INNE.",
+      "steps": "Najlepsza kolejnosc pracy:\n1. Otworz zlozenie z czesciami wirtualnymi.\n2. Podaj folder glowny zapisu i przedrostek nazw.\n3. Sprawdz podglad TXT z lista czesci i typami.\n4. Potwierdz zapis oraz ewentualna podmiane komponentow w zlozeniu.\n\nSzczegoly klasyfikacji:\n- B = Blachy, rozpoznawane automatycznie po cechach Sheet Metal.\n- P = Profile, rozpoznawane automatycznie po Structural Member / WeldMember.\n- F = Frezowane.\n- T = Podkladki.\n- S = Spawane.\n- Z = Zakupowe.\n- INNE = pozostale niesklasyfikowane elementy.",
       "procedure": "main",
       "module": "MacroZapisuCzesciv41",
       "path": ".\\macros\\MacroZapisuCzesciv4_dzialajacy.swp"
@@ -23,7 +23,7 @@
       "launchMode": "attached_or_start",
       "requiresOpenDoc": false,
       "requirements": "Najlepiej uruchamiac po wykonaniu makra zapisu czesci, kiedy masz juz gotowe pliki SLDPRT zapisane do dalszego przetwarzania.",
-      "steps": "1. Najpierw wykonaj makro zapisu czesci.\n2. Kliknij Uruchom w launcherze.\n3. Wskaz folder lub pliki SLDPRT, jesli makro o to poprosi.\n4. Makro utworzy rysunki na podstawie wczesniej zapisanych czesci.",
+      "steps": "Najlepsza kolejnosc pracy:\n1. Najpierw wykonaj zapis czesci z wirtualnego zlozenia.\n2. Kliknij Uruchom w launcherze.\n3. Wskaz folder lub pliki SLDPRT, jesli makro o to poprosi.\n4. Makro utworzy rysunki na podstawie wczesniej zapisanych czesci.",
       "procedure": "main",
       "module": "Macro_rysunkow_pod_pdf_i_",
       "path": ".\\macros\\Macro rysunków pod pdf i pod dxf v4.swp"
@@ -35,7 +35,7 @@
       "launchMode": "attached_or_start",
       "requiresOpenDoc": true,
       "requirements": "Najlepiej uruchamiac po wykonaniu makra zapisu czesci i makra tworzenia rysunkow, kiedy pliki maja juz odpowiednie dopiski i sa gotowe do rozpoznania.",
-      "steps": "1. Najpierw wykonaj zapis czesci oraz tworzenie rysunkow.\n2. Otworz odpowiedni plik lub uruchom makro na przygotowanych danych.\n3. Kliknij Uruchom w launcherze.\n4. Makro odczyta przyrostki i rozpozna, czy dla danego pliku ma utworzyc PDF czy DXF.\n5. Zapisze gotowe pliki wyjsciowe PDF i DXF.",
+      "steps": "Najlepsza kolejnosc pracy:\n1. Najpierw wykonaj zapis czesci oraz tworzenie rysunkow.\n2. Otworz odpowiedni plik lub uruchom makro na przygotowanych danych.\n3. Kliknij Uruchom w launcherze.\n4. Makro odczyta przyrostki i rozpozna, czy dla danego pliku ma utworzyc PDF czy DXF.\n5. Zapisze gotowe pliki wyjsciowe PDF i DXF.",
       "procedure": "main",
       "module": "V1__export_do_pdf_i_dxf_",
       "path": ".\\macros\\V1 - export do pdf i dxf z rozpoznaniem.swp"

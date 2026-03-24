@@ -19,6 +19,9 @@ public static class Win32Native {
 
 $script:AppRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script:ConfigPath = Join-Path $script:AppRoot "macros.json"
+$script:LogsPath = Join-Path $script:AppRoot "logs"
+$script:LogFilePath = Join-Path $script:LogsPath "macro-runs.log"
+$script:BuildTag = "2026-03-24 20:05"
 $script:Colors = @{
     Background = [System.Drawing.ColorTranslator]::FromHtml("#F4F7FB")
     Surface = [System.Drawing.Color]::White
@@ -30,36 +33,6 @@ $script:Colors = @{
     Muted = [System.Drawing.ColorTranslator]::FromHtml("#5D6B7E")
     Border = [System.Drawing.ColorTranslator]::FromHtml("#D7DFEA")
     Warning = [System.Drawing.ColorTranslator]::FromHtml("#9A6700")
-}
-$script:LogDirectory = Join-Path $script:AppRoot "logs"
-$script:LogPath = Join-Path $script:LogDirectory "macro-runs.log"
-
-function Initialize-Logging {
-    if (-not (Test-Path -LiteralPath $script:LogDirectory)) {
-        [void](New-Item -ItemType Directory -Path $script:LogDirectory -Force)
-    }
-
-    if (-not (Test-Path -LiteralPath $script:LogPath)) {
-        [System.IO.File]::WriteAllText($script:LogPath, "", [System.Text.Encoding]::UTF8)
-    }
-}
-
-function Get-MacroLogPath {
-    Initialize-Logging
-    return $script:LogPath
-}
-
-function Write-MacroLog {
-    param(
-        [string]$MacroName,
-        [string]$Status,
-        [string]$Details
-    )
-
-    Initialize-Logging
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $line = "[{0}] {1} - Status: {2} - Details: {3}" -f $timestamp, $MacroName, $Status, $Details
-    Add-Content -LiteralPath $script:LogPath -Value $line -Encoding UTF8
 }
 
 function New-AppFont {
@@ -88,20 +61,26 @@ function Resolve-AppRelativePath {
 function Get-MacroResolvedPath {
     param([hashtable]$Macro)
 
-    $configuredPath = Resolve-AppRelativePath -Path ([string]$Macro.path)
-    if (-not [string]::IsNullOrWhiteSpace($configuredPath) -and (Test-Path -LiteralPath $configuredPath)) {
-        return $configuredPath
-    }
+    return Resolve-AppRelativePath -Path ([string]$Macro.path)
+}
 
-    $fileName = [System.IO.Path]::GetFileName([string]$Macro.path)
-    if (-not [string]::IsNullOrWhiteSpace($fileName)) {
-        $macrosFolderPath = Join-Path (Join-Path $script:AppRoot "macros") $fileName
-        if (Test-Path -LiteralPath $macrosFolderPath) {
-            return $macrosFolderPath
+function Write-MacroLog {
+    param(
+        [string]$MacroName,
+        [string]$Status,
+        [string]$Details
+    )
+
+    try {
+        if (-not (Test-Path -LiteralPath $script:LogsPath)) {
+            New-Item -ItemType Directory -Path $script:LogsPath -Force | Out-Null
         }
-    }
 
-    return $configuredPath
+        $line = "[{0}] {1} - Status: {2} - Details: {3}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $MacroName, $Status, $Details
+        Add-Content -LiteralPath $script:LogFilePath -Value $line -Encoding UTF8
+    }
+    catch {
+    }
 }
 
 function New-DefaultConfig {
@@ -109,7 +88,7 @@ function New-DefaultConfig {
     [void]$macros.Add(@{
         name = "Rysunki do PDF i DXF v4"
         description = "Eksport rysunkow do PDF i DXF."
-        path = ".\\macros\\Macro rysunków pod pdf i pod dxf v4.swp"
+        path = ".\\Macro rysunków pod pdf i pod dxf v4.swp"
         module = "Macro_rysunkow_pod_pdf_i_"
         procedure = "main"
         category = "Eksport"
@@ -120,7 +99,7 @@ function New-DefaultConfig {
     [void]$macros.Add(@{
         name = "Zapis czesci v4"
         description = "Zapis czesci z numerowaniem i podzialem na foldery."
-        path = ".\\macros\\MacroZapisuCzesciv4_dzialajacy.swp"
+        path = ".\\MacroZapisuCzesciv4_dzialajacy.swp"
         module = "MacroZapisuCzesciv41"
         procedure = "main"
         category = "Zapis"
@@ -132,7 +111,7 @@ function New-DefaultConfig {
     [void]$macros.Add(@{
         name = "Export do PDF i DXF z rozpoznaniem"
         description = "Starsza wersja eksportu z rozpoznaniem."
-        path = ".\\macros\\V1 - export do pdf i dxf z rozpoznaniem.swp"
+        path = ".\\V1 - export do pdf i dxf z rozpoznaniem.swp"
         module = "V1__export_do_pdf_i_dxf_"
         procedure = "main"
         category = "Eksport"
@@ -241,12 +220,6 @@ function Normalize-Config {
         if (-not $macro.ContainsKey("steps")) {
             $macro.steps = ""
         }
-        if (-not $macro.ContainsKey("origin")) {
-            $macro.origin = ""
-        }
-        if (-not $macro.ContainsKey("sourceUrl")) {
-            $macro.sourceUrl = ""
-        }
     }
 
     return $Config
@@ -274,68 +247,41 @@ function Import-Config {
 function Get-MacroLabel {
     param([hashtable]$Macro)
 
-    if ([string]::IsNullOrWhiteSpace([string]$Macro.category)) {
-        return $Macro.name
-    }
-
-    return "[{0}] {1}" -f $Macro.category, $Macro.name
+    return [string]$Macro.name
 }
 
 function Get-MacroGlyph {
     param([hashtable]$Macro)
 
-    $category = ([string]$Macro.category).ToLowerInvariant()
-    $name = ([string]$Macro.name).ToLowerInvariant()
+    $name = [string]$Macro.name
+    $category = [string]$Macro.category
 
-    if ($name.Contains("moje: 1. zapis")) { return "ZAP" }
-    if ($name.Contains("moje: 2. tworzenie rysunkow")) { return "RYS" }
-    if ($name.Contains("moje: 3. koncowy export")) { return "OUT" }
-    if ($name.Contains("pobrane:")) { return "DL" }
-    if ($name.Contains("bom")) { return "BOM" }
-    if ($name.Contains("dxf")) { return "DXF" }
-    if ($name.Contains("pdf")) { return "PDF" }
-    if ($name.Contains("sheet")) { return "SHT" }
-    if ($name.Contains("cut list") -or $name.Contains("cutlist")) { return "CUT" }
-    if ($name.Contains("bounding")) { return "BOX" }
-    if ($name.Contains("virtual")) { return "ASM" }
-
-    switch ($category) {
-        "eksport" { return "EXP" }
-        "zapis" { return "SAV" }
-        "rysunki" { return "DRW" }
-        "czesci" { return "PRT" }
-        "zlozenia" { return "ASM" }
-        "github" { return "GIT" }
-        default { return "MAC" }
-    }
+    if ($name -like "Moje: 1.*") { return "ZAP" }
+    if ($name -like "Moje: 2.*") { return "RYS" }
+    if ($name -like "Moje: 3.*") { return "OUT" }
+    if ($name -like "*Bounding Box*") { return "BOX" }
+    if ($name -like "*OBJ*") { return "OBJ" }
+    if ($name -like "*Spline*") { return "CSV" }
+    if ($name -like "*DXF*") { return "DXF" }
+    if ($category -like "*Pobrane*") { return "ADD" }
+    return "MAC"
 }
 
 function Get-MacroAccentColor {
     param([hashtable]$Macro)
 
-    $category = ([string]$Macro.category).ToLowerInvariant()
-    $name = ([string]$Macro.name).ToLowerInvariant()
+    $name = [string]$Macro.name
+    $category = [string]$Macro.category
 
-    if ($name.Contains("moje: rysunki")) { return [System.Drawing.ColorTranslator]::FromHtml("#0A7A5A") }
-    if ($name.Contains("moje: zapis")) { return [System.Drawing.ColorTranslator]::FromHtml("#C26D00") }
-    if ($name.Contains("moje: export z rozpoznaniem")) { return [System.Drawing.ColorTranslator]::FromHtml("#0F5FDB") }
-    if ($name.Contains("pobrane:")) { return [System.Drawing.ColorTranslator]::FromHtml("#6B7280") }
-    if ($name.Contains("bom")) { return [System.Drawing.ColorTranslator]::FromHtml("#C26D00") }
-    if ($name.Contains("dxf")) { return [System.Drawing.ColorTranslator]::FromHtml("#0A7A5A") }
-    if ($name.Contains("pdf")) { return [System.Drawing.ColorTranslator]::FromHtml("#C0392B") }
-    if ($name.Contains("sheet")) { return [System.Drawing.ColorTranslator]::FromHtml("#00838F") }
-    if ($name.Contains("bounding")) { return [System.Drawing.ColorTranslator]::FromHtml("#8E5A00") }
-    if ($name.Contains("virtual")) { return [System.Drawing.ColorTranslator]::FromHtml("#7B1FA2") }
-
-    switch ($category) {
-        "eksport" { return [System.Drawing.ColorTranslator]::FromHtml("#0A7A5A") }
-        "zapis" { return [System.Drawing.ColorTranslator]::FromHtml("#C26D00") }
-        "rysunki" { return [System.Drawing.ColorTranslator]::FromHtml("#00838F") }
-        "czesci" { return [System.Drawing.ColorTranslator]::FromHtml("#8E5A00") }
-        "zlozenia" { return [System.Drawing.ColorTranslator]::FromHtml("#7B1FA2") }
-        "github" { return [System.Drawing.ColorTranslator]::FromHtml("#24292F") }
-        default { return $script:Colors.Primary }
-    }
+    if ($name -like "Moje: 1.*") { return [System.Drawing.ColorTranslator]::FromHtml("#2563EB") }
+    if ($name -like "Moje: 2.*") { return [System.Drawing.ColorTranslator]::FromHtml("#1D4ED8") }
+    if ($name -like "Moje: 3.*") { return [System.Drawing.ColorTranslator]::FromHtml("#059669") }
+    if ($name -like "*Bounding Box*") { return [System.Drawing.ColorTranslator]::FromHtml("#7C3AED") }
+    if ($name -like "*OBJ*") { return [System.Drawing.ColorTranslator]::FromHtml("#C2410C") }
+    if ($name -like "*Spline*") { return [System.Drawing.ColorTranslator]::FromHtml("#0F766E") }
+    if ($name -like "*DXF*") { return [System.Drawing.ColorTranslator]::FromHtml("#475569") }
+    if ($category -like "*Pobrane*") { return [System.Drawing.ColorTranslator]::FromHtml("#64748B") }
+    return $script:Colors.Primary
 }
 
 function Show-Message {
@@ -383,6 +329,56 @@ function Set-PrimaryButtonStyle {
 function New-SystemBitmap {
     param([System.Drawing.Icon]$Icon)
     return $Icon.ToBitmap()
+}
+
+function Get-SolidWorksButtonBitmap {
+    $exePath = Get-SolidWorksExecutablePath
+    if (-not [string]::IsNullOrWhiteSpace($exePath) -and (Test-Path -LiteralPath $exePath)) {
+        try {
+            $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($exePath)
+            if ($null -ne $icon) {
+                return $icon.ToBitmap()
+            }
+        }
+        catch { }
+    }
+
+    return [System.Drawing.SystemIcons]::Application.ToBitmap()
+}
+
+function New-RoundedRectanglePath {
+    param(
+        [System.Drawing.Rectangle]$Rect,
+        [int]$Radius = 16
+    )
+
+    $path = New-Object System.Drawing.Drawing2D.GraphicsPath
+    $diameter = [Math]::Max(2, $Radius * 2)
+
+    $path.AddArc($Rect.X, $Rect.Y, $diameter, $diameter, 180, 90)
+    $path.AddArc(($Rect.Right - $diameter), $Rect.Y, $diameter, $diameter, 270, 90)
+    $path.AddArc(($Rect.Right - $diameter), ($Rect.Bottom - $diameter), $diameter, $diameter, 0, 90)
+    $path.AddArc($Rect.X, ($Rect.Bottom - $diameter), $diameter, $diameter, 90, 90)
+    $path.CloseFigure()
+    return $path
+}
+
+function Set-RoundedRegion {
+    param(
+        [System.Windows.Forms.Control]$Control,
+        [int]$Radius = 16
+    )
+
+    if ($Control.Width -le 0 -or $Control.Height -le 0) { return }
+    $rect = [System.Drawing.Rectangle]::new(0, 0, ($Control.Width - 1), ($Control.Height - 1))
+    $path = New-RoundedRectanglePath -Rect $rect -Radius $Radius
+    try {
+        if ($null -ne $Control.Region) { $Control.Region.Dispose() }
+        $Control.Region = New-Object System.Drawing.Region($path)
+    }
+    finally {
+        $path.Dispose()
+    }
 }
 
 function Get-SolidWorksExecutablePath {
@@ -494,112 +490,11 @@ function Get-SolidWorksMainWindowProcess {
     return $candidates | Sort-Object StartTime -Descending | Select-Object -First 1
 }
 
-function Get-PreferredSolidWorksProcesses {
-    param([string]$RequiredDocType = "")
-
-    $processes = @(Get-Process -Name "SLDWORKS" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 })
-    if ($processes.Count -eq 0) {
-        return @()
-    }
-
-    $preferredPattern = switch ($RequiredDocType) {
-        "assembly" { ".SLDASM" }
-        "part" { ".SLDPRT" }
-        "drawing" { ".SLDDRW" }
-        default { "" }
-    }
-
-    $genericPatterns = @(".SLDASM", ".SLDPRT", ".SLDDRW")
-
-    return @(
-        $processes |
-        Sort-Object `
-            @{ Expression = {
-                    $title = [string]$_.MainWindowTitle
-                    if (-not [string]::IsNullOrWhiteSpace($preferredPattern) -and $title.ToUpperInvariant().Contains($preferredPattern)) {
-                        0
-                    }
-                    elseif ($genericPatterns | Where-Object { $title.ToUpperInvariant().Contains($_) }) {
-                        1
-                    }
-                    else {
-                        2
-                    }
-                }
-            }, `
-            @{ Expression = { $_.StartTime }; Descending = $true }
-    )
-}
-
-function Test-SolidWorksDocumentWindowOpen {
-    $processes = @(Get-PreferredSolidWorksProcesses)
-    if ($processes.Count -eq 0) {
-        return $false
-    }
-
-    foreach ($proc in $processes) {
-        $title = [string]$proc.MainWindowTitle
-        $upper = $title.ToUpperInvariant()
-        if ($upper.Contains(".SLDASM") -or $upper.Contains(".SLDPRT") -or $upper.Contains(".SLDDRW")) {
-            return $true
-        }
-    }
-
-    return $false
-}
-
-function Try-OpenMacroDialogViaCommand {
-    param(
-        $SwApp,
-        [string]$MacroName
-    )
-
-    if ($null -eq $SwApp) {
-        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "RunCommand skipped because COM app object is null."
-        return $false
-    }
-
-    try {
-        $result = $SwApp.RunCommand(30, "")
-        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ISldWorks.RunCommand(30) returned: $result"
-        if ($result) {
-            return $true
-        }
-    }
-    catch {
-        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ISldWorks.RunCommand(30) failed: $($_.Exception.Message)"
-    }
-
-    try {
-        $activeDoc = $SwApp.ActiveDoc
-        if ($null -eq $activeDoc) {
-            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null."
-            return $false
-        }
-
-        $extension = $activeDoc.Extension
-        if ($null -eq $extension) {
-            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ModelDocExtension.RunCommand(30) skipped because Extension is null."
-            return $false
-        }
-
-        $result = $extension.RunCommand(30, "")
-        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "IModelDocExtension.RunCommand(30) returned: $result"
-        return [bool]$result
-    }
-    catch {
-        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "IModelDocExtension.RunCommand(30) failed: $($_.Exception.Message)"
-        return $false
-    }
-}
-
 function Activate-SolidWorksWindow {
-    param([string]$RequiredDocType = "")
-
     $shell = $null
     try {
         $shell = New-Object -ComObject WScript.Shell
-        $processes = @(Get-PreferredSolidWorksProcesses -RequiredDocType $RequiredDocType)
+        $processes = @(Get-Process -Name "SLDWORKS" -ErrorAction SilentlyContinue | Sort-Object StartTime -Descending)
         if ($processes.Count -eq 0) {
             return $false
         }
@@ -657,66 +552,83 @@ function Activate-SolidWorksWindow {
     }
 }
 
-function Invoke-SolidWorksRunDialogFallback {
-    param(
-        [string]$MacroPath,
-        [string]$MacroName = "Launcher",
-        [string]$RequiredDocType = "",
-        $SwApp = $null
-    )
+function Escape-SendKeysText {
+    param([string]$Text)
 
-    if (-not (Activate-SolidWorksWindow -RequiredDocType $RequiredDocType)) {
+    $escaped = $Text.Replace("{", "{{}")
+    foreach ($ch in @("+","^","%","~","(",")","[","]")) {
+        $escaped = $escaped.Replace($ch, "{$ch}")
+    }
+    return $escaped
+}
+
+function Test-HasOpenSolidWorksDocumentWindow {
+    $titles = @(Get-Process -Name "SLDWORKS" -ErrorAction SilentlyContinue | ForEach-Object { $_.MainWindowTitle } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    foreach ($title in $titles) {
+        if ($title -match '\.SLD(ASM|PRT|DRW)') {
+            return $true
+        }
+    }
+    return $false
+}
+
+function Invoke-SolidWorksRunDialogFallback {
+    param([string]$MacroPath)
+
+    if (-not (Activate-SolidWorksWindow)) {
         throw "Nie udalo sie aktywowac glownego okna SolidWorks."
     }
 
     $shell = New-Object -ComObject WScript.Shell
-    $dialogOpened = $false
+    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Fallback open-macro dialog for path: $MacroPath"
+    Start-Sleep -Milliseconds 450
+    $shell.SendKeys("{ESC}")
+    Start-Sleep -Milliseconds 100
+    $shell.SendKeys("{ESC}")
+    Start-Sleep -Milliseconds 160
+    $hasOpenDocWindow = Test-HasOpenSolidWorksDocumentWindow
+    $shell.SendKeys("%n")
+    Start-Sleep -Milliseconds 320
 
-    if ($null -ne $SwApp) {
-        $dialogOpened = Try-OpenMacroDialogViaCommand -SwApp $SwApp -MacroName $MacroName
-    }
-
-    if (-not $dialogOpened) {
-        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "Fallback open-macro dialog through menu navigation for path: $MacroPath"
-        $useLongToolsMenu = Test-SolidWorksDocumentWindowOpen
-        Start-Sleep -Milliseconds 450
-        $shell.SendKeys("{ESC}")
-        Start-Sleep -Milliseconds 120
-        $shell.SendKeys("{ESC}")
-        Start-Sleep -Milliseconds 180
-        $shell.SendKeys("%n")
-        Start-Sleep -Milliseconds 260
-        if ($useLongToolsMenu) {
-            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "Using long Tools menu navigation because a document window is open."
-            $shell.SendKeys("{END}")
-            Start-Sleep -Milliseconds 220
-            for ($i = 0; $i -lt 7; $i++) {
-                $shell.SendKeys("{UP}")
-                Start-Sleep -Milliseconds 90
-            }
-        }
-        else {
-            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "Using short Tools menu navigation."
-            $shell.SendKeys("m")
-            Start-Sleep -Milliseconds 220
+    if ($hasOpenDocWindow) {
+        Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Using long Tools menu path for open document."
+        $shell.SendKeys("{END}")
+        Start-Sleep -Milliseconds 140
+        1..7 | ForEach-Object {
+            $shell.SendKeys("{UP}")
+            Start-Sleep -Milliseconds 110
         }
         $shell.SendKeys("{RIGHT}")
-        Start-Sleep -Milliseconds 220
+        Start-Sleep -Milliseconds 180
+        1..3 | ForEach-Object {
+            $shell.SendKeys("{DOWN}")
+            Start-Sleep -Milliseconds 110
+        }
+        $shell.SendKeys("{ENTER}")
+    }
+    else {
+        Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Using short Tools menu path for empty SolidWorks."
         $shell.SendKeys("{DOWN}")
-        Start-Sleep -Milliseconds 90
+        Start-Sleep -Milliseconds 110
         $shell.SendKeys("{DOWN}")
-        Start-Sleep -Milliseconds 90
+        Start-Sleep -Milliseconds 110
+        $shell.SendKeys("{DOWN}")
+        Start-Sleep -Milliseconds 110
         $shell.SendKeys("{DOWN}")
         Start-Sleep -Milliseconds 180
+        $shell.SendKeys("{RIGHT}")
+        Start-Sleep -Milliseconds 180
+        1..3 | ForEach-Object {
+            $shell.SendKeys("{DOWN}")
+            Start-Sleep -Milliseconds 110
+        }
         $shell.SendKeys("{ENTER}")
-        Start-Sleep -Milliseconds 950
     }
 
-    $shell.SendKeys("%n")
-    Start-Sleep -Milliseconds 120
-    $shell.SendKeys("^a")
-    Start-Sleep -Milliseconds 120
+    Start-Sleep -Milliseconds 950
     [System.Windows.Forms.Clipboard]::SetText($MacroPath)
+    Start-Sleep -Milliseconds 100
+    $shell.SendKeys("^a")
     Start-Sleep -Milliseconds 120
     $shell.SendKeys("^v")
     Start-Sleep -Milliseconds 180
@@ -779,6 +691,10 @@ function Invoke-SolidWorksMacro {
         throw "Nie znaleziono pliku makra:`n$macroPath"
     }
 
+    if ([string]::IsNullOrWhiteSpace([string]$Macro.module) -or [string]::IsNullOrWhiteSpace([string]$Macro.procedure)) {
+        throw "Dla tego makra brakuje nazwy modulu lub procedury startowej. Uzupelnij te pola w edycji makra."
+    }
+
     $launchMode = [string]$Macro.launchMode
     if ([string]::IsNullOrWhiteSpace($launchMode)) {
         $launchMode = "attached_or_start"
@@ -800,10 +716,9 @@ function Invoke-SolidWorksMacro {
         return @{ startedNow = $true; fallbackMode = "startup-switch" }
     }
 
-    $swApp = Get-OrWaitForSolidWorksApplication -TimeoutSeconds 10
     try {
         Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "SolidWorks process detected. Using menu-dialog fallback only."
-        Invoke-SolidWorksRunDialogFallback -MacroPath $macroPath -MacroName $Macro.name -RequiredDocType ([string]$Macro.requiredDocType) -SwApp $swApp
+        Invoke-SolidWorksRunDialogFallback -MacroPath $macroPath
         return @{ startedNow = $startedNow; fallbackMode = "menu-dialog" }
     }
     catch {
@@ -976,15 +891,15 @@ try {
     $config = Import-Config
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "SolidWorks Macro Center"
-    $form.Size = New-Object System.Drawing.Size(1060, 650)
-    $form.MinimumSize = New-Object System.Drawing.Size(1060, 650)
+    $form.Text = "SolidWorks Macro Center [$($script:BuildTag)]"
+    $form.Size = New-Object System.Drawing.Size(1180, 720)
+    $form.MinimumSize = New-Object System.Drawing.Size(1180, 720)
     $form.StartPosition = "CenterScreen"
     $form.BackColor = $script:Colors.Background
     $form.Font = New-AppFont -Size 9
 
     $headerPanel = New-Object System.Windows.Forms.Panel
-    $headerPanel.Left = 0; $headerPanel.Top = 0; $headerPanel.Width = 1060; $headerPanel.Height = 94
+    $headerPanel.Left = 0; $headerPanel.Top = 0; $headerPanel.Width = 1180; $headerPanel.Height = 94
     $headerPanel.BackColor = $script:Colors.Primary; $headerPanel.Anchor = "Top,Left,Right"
 
     $headerIcon = New-Object System.Windows.Forms.PictureBox
@@ -998,38 +913,29 @@ try {
     $headerTitle.ForeColor = [System.Drawing.Color]::White; $headerTitle.Font = New-AppFont -Size 18 -Style Bold
 
     $headerSubtitle = New-Object System.Windows.Forms.Label
-    $headerSubtitle.Text = "Jedno miejsce do uruchamiania, porzadkowania i rozwijania Twoich makr."
-    $headerSubtitle.Left = 92; $headerSubtitle.Top = 52; $headerSubtitle.Width = 620; $headerSubtitle.Height = 22
+    $headerSubtitle.Text = "Jedno miejsce do uruchamiania, porzadkowania i rozwijania Twoich makr. Wersja: $($script:BuildTag)"
+    $headerSubtitle.Left = 92; $headerSubtitle.Top = 52; $headerSubtitle.Width = 760; $headerSubtitle.Height = 22
     $headerSubtitle.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#DCE8FF")
     $headerSubtitle.Font = New-AppFont -Size 9.5
 
     $leftPanel = New-Object System.Windows.Forms.Panel
-    $leftPanel.Left = 20; $leftPanel.Top = 114; $leftPanel.Width = 340; $leftPanel.Height = 500
+    $leftPanel.Left = 20; $leftPanel.Top = 114; $leftPanel.Width = 420; $leftPanel.Height = 560
     $leftPanel.BackColor = $script:Colors.Surface; $leftPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle; $leftPanel.Anchor = "Top,Bottom,Left"
 
     $leftTitle = New-Object System.Windows.Forms.Label
     $leftTitle.Text = "Biblioteka makr"; $leftTitle.Left = 16; $leftTitle.Top = 14; $leftTitle.Width = 200
     $leftTitle.Font = New-AppFont -Size 11 -Style Bold
 
-    $btnFilterAll = New-Object System.Windows.Forms.Button
-    $btnFilterAll.Text = "Wszystkie"; $btnFilterAll.Left = 16; $btnFilterAll.Top = 44; $btnFilterAll.Width = 92; $btnFilterAll.Height = 28
-
-    $btnFilterMine = New-Object System.Windows.Forms.Button
-    $btnFilterMine.Text = "Moje"; $btnFilterMine.Left = 114; $btnFilterMine.Top = 44; $btnFilterMine.Width = 72; $btnFilterMine.Height = 28
-
-    $btnFilterDownloaded = New-Object System.Windows.Forms.Button
-    $btnFilterDownloaded.Text = "Pobrane"; $btnFilterDownloaded.Left = 192; $btnFilterDownloaded.Top = 44; $btnFilterDownloaded.Width = 88; $btnFilterDownloaded.Height = 28
-
     $listBox = New-Object System.Windows.Forms.ListBox
-    $listBox.Left = 12; $listBox.Top = 82; $listBox.Width = 314; $listBox.Height = 314
+    $listBox.Left = 16; $listBox.Top = 46; $listBox.Width = 386; $listBox.Height = 410
     $listBox.BorderStyle = [System.Windows.Forms.BorderStyle]::None
     $listBox.BackColor = $script:Colors.Surface; $listBox.ForeColor = $script:Colors.Text
     $listBox.Font = New-AppFont -Size 10; $listBox.IntegralHeight = $false; $listBox.Anchor = "Top,Bottom,Left,Right"
     $listBox.DrawMode = [System.Windows.Forms.DrawMode]::OwnerDrawFixed
-    $listBox.ItemHeight = 108
+    $listBox.ItemHeight = 128
 
     $rightPanel = New-Object System.Windows.Forms.Panel
-    $rightPanel.Left = 380; $rightPanel.Top = 114; $rightPanel.Width = 658; $rightPanel.Height = 500
+    $rightPanel.Left = 460; $rightPanel.Top = 114; $rightPanel.Width = 700; $rightPanel.Height = 560
     $rightPanel.BackColor = $script:Colors.Surface; $rightPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle; $rightPanel.Anchor = "Top,Bottom,Left,Right"
 
     $detailsTitle = New-Object System.Windows.Forms.Label
@@ -1037,125 +943,148 @@ try {
     $detailsTitle.Font = New-AppFont -Size 12 -Style Bold
 
     $detailsBox = New-Object System.Windows.Forms.TextBox
-    $detailsBox.Left = 20; $detailsBox.Top = 54; $detailsBox.Width = 618; $detailsBox.Height = 300
+    $detailsBox.Left = 20; $detailsBox.Top = 54; $detailsBox.Width = 660; $detailsBox.Height = 390
     $detailsBox.Multiline = $true; $detailsBox.ReadOnly = $true; $detailsBox.ScrollBars = "Vertical"
     $detailsBox.BackColor = $script:Colors.SurfaceAlt; $detailsBox.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
     $detailsBox.Font = New-AppFont -Size 9.5; $detailsBox.Anchor = "Top,Bottom,Left,Right"
 
     $chkVisible = New-Object System.Windows.Forms.CheckBox
-    $chkVisible.Left = 20; $chkVisible.Top = 370; $chkVisible.Width = 280
+    $chkVisible.Left = 20; $chkVisible.Top = 458; $chkVisible.Width = 320
     $chkVisible.Text = "Pokazuj SolidWorks przy uruchamianiu"; $chkVisible.Checked = [bool]$config.solidworks.visible; $chkVisible.Anchor = "Left,Bottom"
 
-    $hintLabel = New-Object System.Windows.Forms.Label
-    $hintLabel.Left = 20; $hintLabel.Top = 398; $hintLabel.Width = 600; $hintLabel.Height = 52
-    $hintLabel.Text = "Tryby: attached_only = tylko na juz otwartym SolidWorks, attached_or_start = podlacz lub uruchom, startup_switch = awaryjnie przez okno uruchamiania makra."
-    $hintLabel.ForeColor = $script:Colors.Muted; $hintLabel.Font = New-AppFont -Size 8.5
-
     $statusLabel = New-Object System.Windows.Forms.Label
-    $statusLabel.Left = 20; $statusLabel.Top = 596; $statusLabel.Width = 1018; $statusLabel.Height = 30
+    $statusLabel.Left = 20; $statusLabel.Top = 666; $statusLabel.Width = 1140; $statusLabel.Height = 30
     $statusLabel.Text = "Gotowe."; $statusLabel.ForeColor = $script:Colors.Muted; $statusLabel.Font = New-AppFont -Size 9.5
 
     $btnRun = New-Object System.Windows.Forms.Button
-    $btnRun.Text = "Uruchom w SolidWorks"; $btnRun.Left = 20; $btnRun.Top = 448; $btnRun.Width = 206; $btnRun.Height = 42
-    $btnRun.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Shield); $btnRun.Anchor = "Left,Bottom"
-
-    $btnOpenFile = New-Object System.Windows.Forms.Button
-    $btnOpenFile.Text = "Pokaz plik"; $btnOpenFile.Left = 236; $btnOpenFile.Top = 448; $btnOpenFile.Width = 126; $btnOpenFile.Height = 42
-    $btnOpenFile.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Information); $btnOpenFile.Anchor = "Left,Bottom"
-
-    $btnOpenFolder = New-Object System.Windows.Forms.Button
-    $btnOpenFolder.Text = "Otworz folder"; $btnOpenFolder.Left = 372; $btnOpenFolder.Top = 448; $btnOpenFolder.Width = 134; $btnOpenFolder.Height = 42
-    $btnOpenFolder.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::WinLogo); $btnOpenFolder.Anchor = "Left,Bottom"
-
+    $btnRun.Text = "Uruchom w SolidWorks"; $btnRun.Left = 20; $btnRun.Top = 502; $btnRun.Width = 260; $btnRun.Height = 44
+    $btnRun.Image = Get-SolidWorksButtonBitmap; $btnRun.Anchor = "Left,Bottom"
     $btnAdd = New-Object System.Windows.Forms.Button
-    $btnAdd.Text = "Dodaj"; $btnAdd.Left = 16; $btnAdd.Top = 410; $btnAdd.Width = 94; $btnAdd.Height = 42
+    $btnAdd.Text = "Dodaj"; $btnAdd.Left = 16; $btnAdd.Top = 470; $btnAdd.Width = 112; $btnAdd.Height = 42
     $btnAdd.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Application); $btnAdd.Anchor = "Left,Bottom"
 
     $btnEdit = New-Object System.Windows.Forms.Button
-    $btnEdit.Text = "Edytuj"; $btnEdit.Left = 120; $btnEdit.Top = 410; $btnEdit.Width = 94; $btnEdit.Height = 42
+    $btnEdit.Text = "Edytuj"; $btnEdit.Left = 144; $btnEdit.Top = 470; $btnEdit.Width = 112; $btnEdit.Height = 42
     $btnEdit.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Asterisk); $btnEdit.Anchor = "Left,Bottom"
 
     $btnDelete = New-Object System.Windows.Forms.Button
-    $btnDelete.Text = "Usun"; $btnDelete.Left = 224; $btnDelete.Top = 410; $btnDelete.Width = 94; $btnDelete.Height = 42
+    $btnDelete.Text = "Usun"; $btnDelete.Left = 272; $btnDelete.Top = 470; $btnDelete.Width = 112; $btnDelete.Height = 42
     $btnDelete.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Error); $btnDelete.Anchor = "Left,Bottom"
 
     $btnSaveConfig = New-Object System.Windows.Forms.Button
-    $btnSaveConfig.Text = "Zapisz konfiguracje"; $btnSaveConfig.Left = 460; $btnSaveConfig.Top = 448; $btnSaveConfig.Width = 178; $btnSaveConfig.Height = 42
+    $btnSaveConfig.Text = "Zapisz konfiguracje"; $btnSaveConfig.Left = 482; $btnSaveConfig.Top = 502; $btnSaveConfig.Width = 198; $btnSaveConfig.Height = 44
     $btnSaveConfig.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Question); $btnSaveConfig.Anchor = "Right,Bottom"
 
     Set-PrimaryButtonStyle -Button $btnRun
-    foreach ($button in @($btnOpenFile, $btnOpenFolder, $btnAdd, $btnEdit, $btnDelete, $btnSaveConfig, $btnFilterAll, $btnFilterMine, $btnFilterDownloaded)) {
+    foreach ($button in @($btnAdd, $btnEdit, $btnDelete, $btnSaveConfig)) {
         Set-ButtonStyle -Button $button
     }
-
-    $script:macroFilter = "all"
-    $script:displayedMacros = [System.Collections.ArrayList]::new()
-
-    function Test-MacroMatchesFilter {
-        param(
-            [hashtable]$Macro,
-            [string]$Filter
-        )
-
-        $name = ([string]$Macro.name).ToLowerInvariant()
-        switch ($Filter) {
-            "mine" { return $name.StartsWith("moje:") }
-            "downloaded" { return $name.StartsWith("pobrane:") }
-            default { return $true }
-        }
-    }
-
-    function Update-FilterButtons {
-        foreach ($btn in @($btnFilterAll, $btnFilterMine, $btnFilterDownloaded)) {
-            Set-ButtonStyle -Button $btn
-        }
-
-        switch ($script:macroFilter) {
-            "mine" { Set-PrimaryButtonStyle -Button $btnFilterMine }
-            "downloaded" { Set-PrimaryButtonStyle -Button $btnFilterDownloaded }
-            default { Set-PrimaryButtonStyle -Button $btnFilterAll }
-        }
+    foreach ($control in @($btnRun, $btnAdd, $btnEdit, $btnDelete, $btnSaveConfig, $leftPanel, $rightPanel, $detailsBox)) {
+        Set-RoundedRegion -Control $control -Radius 14
     }
 
     function Get-SelectedMacro {
         if ($listBox.SelectedIndex -lt 0) { return $null }
-        return [hashtable]$script:displayedMacros[$listBox.SelectedIndex]
+        return [hashtable]$config.macros[$listBox.SelectedIndex]
     }
 
     function Refresh-MacroList {
-        $selectedName = $null
-        if ($listBox.SelectedIndex -ge 0 -and $listBox.SelectedIndex -lt $script:displayedMacros.Count) {
-            $selectedName = [string]([hashtable]$script:displayedMacros[$listBox.SelectedIndex]).name
-        }
-
-        $script:displayedMacros = [System.Collections.ArrayList]::new()
         $listBox.Items.Clear()
         foreach ($macro in $config.macros) {
-            $macroHash = [hashtable]$macro
-            if (Test-MacroMatchesFilter -Macro $macroHash -Filter $script:macroFilter) {
-                [void]$script:displayedMacros.Add($macroHash)
-                [void]$listBox.Items.Add($macroHash)
-            }
+            [void]$listBox.Items.Add((Get-MacroLabel -Macro ([hashtable]$macro)))
         }
 
         if ($listBox.Items.Count -gt 0) {
-            $newIndex = 0
-            if (-not [string]::IsNullOrWhiteSpace($selectedName)) {
-                for ($i = 0; $i -lt $script:displayedMacros.Count; $i++) {
-                    if ([string]([hashtable]$script:displayedMacros[$i]).name -eq $selectedName) {
-                        $newIndex = $i
-                        break
-                    }
-                }
-            }
-            $listBox.SelectedIndex = $newIndex
+            if ($listBox.SelectedIndex -lt 0) { $listBox.SelectedIndex = 0 }
         }
         else {
             $detailsBox.Text = "Brak makr w konfiguracji."
         }
-
-        Update-FilterButtons
     }
+
+    $listBox.Add_DrawItem({
+        param($sender, $e)
+
+        $e.DrawBackground()
+        if ($e.Index -lt 0 -or $e.Index -ge $config.macros.Count) { return }
+
+        $macro = [hashtable]$config.macros[$e.Index]
+        $bounds = $e.Bounds
+        $selected = (($e.State -band [System.Windows.Forms.DrawItemState]::Selected) -eq [System.Windows.Forms.DrawItemState]::Selected)
+
+        $cardBack = if ($selected) { [System.Drawing.ColorTranslator]::FromHtml("#EAF2FF") } else { [System.Drawing.Color]::White }
+        $cardBorder = if ($selected) { $script:Colors.Primary } else { $script:Colors.Border }
+        $accent = Get-MacroAccentColor -Macro $macro
+        $glyph = Get-MacroGlyph -Macro $macro
+
+        $rect = [System.Drawing.Rectangle]::new(($bounds.X + 4), ($bounds.Y + 4), ($bounds.Width - 10), ($bounds.Height - 8))
+        $glyphRect = [System.Drawing.Rectangle]::new(($rect.X + 14), ($rect.Y + 18), 56, 56)
+        $titleX = $glyphRect.Right + 14
+        $titleY = $rect.Y + 12
+
+        $backBrush = New-Object System.Drawing.SolidBrush $cardBack
+        $borderPen = New-Object System.Drawing.Pen $cardBorder
+        $accentBrush = New-Object System.Drawing.SolidBrush $accent
+        $textBrush = New-Object System.Drawing.SolidBrush $script:Colors.Text
+        $mutedBrush = New-Object System.Drawing.SolidBrush $script:Colors.Muted
+        $badgeBack = New-Object System.Drawing.SolidBrush ([System.Drawing.ColorTranslator]::FromHtml("#EDF4FF"))
+        $badgeText = New-Object System.Drawing.SolidBrush $accent
+
+        $formatTitle = New-Object System.Drawing.StringFormat
+        $formatTitle.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
+        $formatTitle.FormatFlags = [System.Drawing.StringFormatFlags]::LineLimit
+
+        $formatDesc = New-Object System.Drawing.StringFormat
+        $formatDesc.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
+        $formatDesc.FormatFlags = [System.Drawing.StringFormatFlags]::LineLimit
+
+        try {
+            $e.Graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+            $cardPath = New-RoundedRectanglePath -Rect $rect -Radius 18
+            try {
+                $e.Graphics.FillPath($backBrush, $cardPath)
+                $e.Graphics.DrawPath($borderPen, $cardPath)
+            }
+            finally {
+                $cardPath.Dispose()
+            }
+            $e.Graphics.FillEllipse($accentBrush, $glyphRect)
+            $e.Graphics.DrawString($glyph, (New-AppFont -Size 10 -Style Bold), ([System.Drawing.Brushes]::White), ($glyphRect.X + 8), ($glyphRect.Y + 17))
+
+            $titleRect = [System.Drawing.RectangleF]::new([float]$titleX, [float]$titleY, [float]($rect.Width - 96), [float]40)
+            $e.Graphics.DrawString([string]$macro.name, (New-AppFont -Size 10.4 -Style Bold), $textBrush, $titleRect, $formatTitle)
+
+            $badgeWidth = [Math]::Min(150, [Math]::Max(84, ([int]([string]$macro.category).Length * 6 + 18)))
+            $badgeRect = [System.Drawing.Rectangle]::new($titleX, ($titleY + 42), $badgeWidth, 22)
+            $badgePath = New-RoundedRectanglePath -Rect $badgeRect -Radius 8
+            $badgePen = New-Object System.Drawing.Pen $accent
+            try {
+                $e.Graphics.FillPath($badgeBack, $badgePath)
+                $e.Graphics.DrawPath($badgePen, $badgePath)
+            }
+            finally {
+                $badgePath.Dispose()
+                $badgePen.Dispose()
+            }
+            $e.Graphics.DrawString([string]$macro.category, (New-AppFont -Size 8.5 -Style Bold), $badgeText, ($badgeRect.X + 6), ($badgeRect.Y + 3))
+
+            $descRect = [System.Drawing.RectangleF]::new([float]$titleX, [float]($titleY + 70), [float]($rect.Width - 96), [float]34)
+            $e.Graphics.DrawString([string]$macro.description, (New-AppFont -Size 8.8), $mutedBrush, $descRect, $formatDesc)
+        }
+        finally {
+            $backBrush.Dispose()
+            $borderPen.Dispose()
+            $accentBrush.Dispose()
+            $textBrush.Dispose()
+            $mutedBrush.Dispose()
+            $badgeBack.Dispose()
+            $badgeText.Dispose()
+            $formatTitle.Dispose()
+            $formatDesc.Dispose()
+        }
+
+        $e.DrawFocusRectangle()
+    })
 
     function Update-Details {
         $macro = Get-SelectedMacro
@@ -1165,44 +1094,19 @@ try {
         }
 
         $resolvedPath = Get-MacroResolvedPath -Macro $macro
-        $docRequirementText = "Nie"
-        if ([bool]$macro.requiresOpenDoc) {
-            $docRequirementText = "Tak"
-            if (-not [string]::IsNullOrWhiteSpace([string]$macro.requiredDocType)) {
-                $docRequirementText += " ($($macro.requiredDocType))"
-            }
-        }
-
         $lines = @(
             "Nazwa: $($macro.name)",
             "Kategoria: $($macro.category)",
-            "Tryb uruchamiania: $($macro.launchMode)",
-            "Wymaga otwartego dokumentu: $docRequirementText",
             "",
             "Opis makra:",
             $macro.description,
             "",
             "Sciezka:",
-            $resolvedPath
+            $resolvedPath,
+            "",
+            "Modul VBA: $($macro.module)",
+            "Procedura startowa: $($macro.procedure)"
         )
-
-        if (-not [string]::IsNullOrWhiteSpace([string]$macro.origin)) {
-            $lines += ""
-            $lines += "Pochodzenie:"
-            $lines += $macro.origin
-        }
-
-        if (-not [string]::IsNullOrWhiteSpace([string]$macro.sourceUrl)) {
-            $lines += ""
-            $lines += "Zrodlo:"
-            $lines += [string]$macro.sourceUrl
-        }
-
-        if (-not [string]::IsNullOrWhiteSpace([string]$macro.module) -or -not [string]::IsNullOrWhiteSpace([string]$macro.procedure)) {
-            $lines += ""
-            $lines += "Modul VBA: $($macro.module)"
-            $lines += "Procedura startowa: $($macro.procedure)"
-        }
 
         if (-not [string]::IsNullOrWhiteSpace([string]$macro.requirements)) {
             $lines += ""
@@ -1218,107 +1122,11 @@ try {
             }
         }
 
-        if (([string]$macro.name).ToLowerInvariant().StartsWith("moje:")) {
-            $lines += ""
-            $lines += "Najlepsza kolejnosc pracy:"
-            $lines += "1. Zapis czesci z wirtualnego zlozenia"
-            $lines += "2. Tworzenie rysunkow z zapisanych SLDPRT"
-            $lines += "3. Koncowy export PDF i DXF z rozpoznaniem"
-        }
-
         $detailsBox.Text = ($lines -join [Environment]::NewLine)
     }
 
-    $listBox.Add_DrawItem({
-        param($sender, $e)
-
-        if ($e.Index -lt 0 -or $e.Index -ge $script:displayedMacros.Count) {
-            return
-        }
-
-        $macro = [hashtable]$script:displayedMacros[$e.Index]
-        $accent = Get-MacroAccentColor -Macro $macro
-        $glyph = Get-MacroGlyph -Macro $macro
-        $bounds = $e.Bounds
-
-        $e.DrawBackground()
-        $e.Graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
-
-        $cardRect = New-Object System.Drawing.Rectangle ($bounds.Left + 4), ($bounds.Top + 4), ($bounds.Width - 8), ($bounds.Height - 8)
-        $cardColor = if (($e.State -band [System.Windows.Forms.DrawItemState]::Selected) -eq [System.Windows.Forms.DrawItemState]::Selected) {
-            [System.Drawing.ColorTranslator]::FromHtml("#E8F0FF")
-        } else {
-            [System.Drawing.Color]::White
-        }
-
-        $cardBrush = New-Object System.Drawing.SolidBrush($cardColor)
-        $borderPen = New-Object System.Drawing.Pen($script:Colors.Border)
-        $e.Graphics.FillRectangle($cardBrush, $cardRect)
-        $e.Graphics.DrawRectangle($borderPen, $cardRect)
-
-        $iconRect = New-Object System.Drawing.Rectangle ($cardRect.Left + 12), ($cardRect.Top + 14), 44, 44
-        $iconBrush = New-Object System.Drawing.SolidBrush($accent)
-        $e.Graphics.FillEllipse($iconBrush, $iconRect)
-
-        $glyphFont = New-AppFont -Size 9 -Style Bold
-        $glyphBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
-        $glyphSize = $e.Graphics.MeasureString($glyph, $glyphFont)
-        $glyphX = [single]($iconRect.Left + (($iconRect.Width - $glyphSize.Width) / 2))
-        $glyphY = [single]($iconRect.Top + (($iconRect.Height - $glyphSize.Height) / 2))
-        $e.Graphics.DrawString($glyph, $glyphFont, $glyphBrush, $glyphX, $glyphY)
-
-        $titleFont = New-AppFont -Size 10 -Style Bold
-        $bodyFont = New-AppFont -Size 8.5
-        $metaFont = New-AppFont -Size 8 -Style Bold
-        $textBrush = New-Object System.Drawing.SolidBrush($script:Colors.Text)
-        $mutedBrush = New-Object System.Drawing.SolidBrush($script:Colors.Muted)
-
-        $titleX = $iconRect.Right + 12
-        $titleY = $cardRect.Top + 10
-        $titleRect = New-Object System.Drawing.RectangleF ([single]$titleX), ([single]$titleY), ([single]($cardRect.Width - ($titleX - $cardRect.Left) - 12)), 34
-        $titleFormat = New-Object System.Drawing.StringFormat
-        $titleFormat.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
-        $e.Graphics.DrawString([string]$macro.name, $titleFont, $textBrush, $titleRect, $titleFormat)
-
-        $chipText = if ([string]::IsNullOrWhiteSpace([string]$macro.category)) { "Makro" } else { [string]$macro.category }
-        $chipSize = $e.Graphics.MeasureString($chipText, $metaFont)
-        $chipRect = New-Object System.Drawing.RectangleF ([single]$titleX), ([single]($cardRect.Top + 42)), ([single]([Math]::Min(170, $chipSize.Width + 16))), 18
-        $chipBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(20, $accent))
-        $chipBorderPen = New-Object System.Drawing.Pen($accent)
-        $e.Graphics.FillRectangle($chipBrush, $chipRect)
-        $e.Graphics.DrawRectangle($chipBorderPen, [System.Drawing.Rectangle]::Round($chipRect))
-        $chipTextBrush = New-Object System.Drawing.SolidBrush($accent)
-        $e.Graphics.DrawString($chipText, $metaFont, $chipTextBrush, [single]($chipRect.X + 8), [single]($chipRect.Y + 2))
-
-        $descriptionRect = New-Object System.Drawing.RectangleF ([single]$titleX), ([single]($cardRect.Top + 64)), ([single]($cardRect.Width - ($titleX - $cardRect.Left) - 12)), 28
-        $descriptionFormat = New-Object System.Drawing.StringFormat
-        $descriptionFormat.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
-        $e.Graphics.DrawString([string]$macro.description, $bodyFont, $mutedBrush, $descriptionRect, $descriptionFormat)
-
-        $cardBrush.Dispose()
-        $borderPen.Dispose()
-        $iconBrush.Dispose()
-        $glyphBrush.Dispose()
-        $textBrush.Dispose()
-        $mutedBrush.Dispose()
-        $chipBrush.Dispose()
-        $chipBorderPen.Dispose()
-        $chipTextBrush.Dispose()
-        $titleFormat.Dispose()
-        $descriptionFormat.Dispose()
-        $glyphFont.Dispose()
-        $titleFont.Dispose()
-        $bodyFont.Dispose()
-        $metaFont.Dispose()
-
-        $e.DrawFocusRectangle()
-    })
-
     $chkVisible.Add_CheckedChanged({ $config.solidworks.visible = $chkVisible.Checked })
     $listBox.Add_SelectedIndexChanged({ Update-Details })
-    $btnFilterAll.Add_Click({ $script:macroFilter = "all"; Refresh-MacroList })
-    $btnFilterMine.Add_Click({ $script:macroFilter = "mine"; Refresh-MacroList })
-    $btnFilterDownloaded.Add_Click({ $script:macroFilter = "downloaded"; Refresh-MacroList })
 
     $btnRun.Add_Click({
         $macro = Get-SelectedMacro
@@ -1348,33 +1156,6 @@ try {
             $statusLabel.Text = "Blad uruchamiania: $($_.Exception.Message)"
             Show-Message -Text $_.Exception.Message -Title "Nie udalo sie uruchomic makra" -Icon Error
         }
-    })
-
-    $btnOpenFile.Add_Click({
-        $macro = Get-SelectedMacro
-        if ($null -eq $macro) { return }
-        $resolvedPath = Get-MacroResolvedPath -Macro $macro
-
-        if (-not (Test-Path -LiteralPath $resolvedPath)) {
-            Show-Message -Text "Plik nie istnieje:`n$resolvedPath" -Title "Brak pliku" -Icon Warning
-            return
-        }
-
-        Start-Process explorer.exe -ArgumentList "/select,`"$resolvedPath`""
-    })
-
-    $btnOpenFolder.Add_Click({
-        $macro = Get-SelectedMacro
-        if ($null -eq $macro) { return }
-        $resolvedPath = Get-MacroResolvedPath -Macro $macro
-
-        if (-not (Test-Path -LiteralPath $resolvedPath)) {
-            Show-Message -Text "Plik nie istnieje:`n$resolvedPath" -Title "Brak pliku" -Icon Warning
-            return
-        }
-
-        $folderPath = Split-Path -Parent $resolvedPath
-        Start-Process explorer.exe -ArgumentList "`"$folderPath`""
     })
 
     $btnAdd.Add_Click({
@@ -1437,7 +1218,7 @@ try {
 
     foreach ($control in @($headerIcon, $headerTitle, $headerSubtitle)) { $headerPanel.Controls.Add($control) }
     foreach ($control in @($leftTitle, $listBox, $btnAdd, $btnEdit, $btnDelete)) { $leftPanel.Controls.Add($control) }
-    foreach ($control in @($detailsTitle, $detailsBox, $chkVisible, $hintLabel, $btnRun, $btnOpenFile, $btnOpenFolder, $btnSaveConfig)) { $rightPanel.Controls.Add($control) }
+    foreach ($control in @($detailsTitle, $detailsBox, $chkVisible, $btnRun, $btnSaveConfig)) { $rightPanel.Controls.Add($control) }
     foreach ($control in @($headerPanel, $leftPanel, $rightPanel, $statusLabel)) { $form.Controls.Add($control) }
 
     Refresh-MacroList
