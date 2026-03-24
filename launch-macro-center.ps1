@@ -19,6 +19,7 @@ public static class Win32Native {
 
 $script:AppRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script:ConfigPath = Join-Path $script:AppRoot "macros.json"
+$script:LogDir = Join-Path $script:AppRoot "logs"
 $script:Colors = @{
     Background = [System.Drawing.ColorTranslator]::FromHtml("#F4F7FB")
     Surface = [System.Drawing.Color]::White
@@ -30,6 +31,31 @@ $script:Colors = @{
     Muted = [System.Drawing.ColorTranslator]::FromHtml("#5D6B7E")
     Border = [System.Drawing.ColorTranslator]::FromHtml("#D7DFEA")
     Warning = [System.Drawing.ColorTranslator]::FromHtml("#9A6700")
+}
+
+function Initialize-Logging {
+    if (-not (Test-Path $script:LogDir)) {
+        New-Item -ItemType Directory -Path $script:LogDir -Force | Out-Null
+    }
+}
+
+function Write-MacroLog {
+    param(
+        [string]$MacroName,
+        [string]$Status,
+        [string]$Details = ""
+    )
+    
+    $logFile = Join-Path $script:LogDir "macro-runs.log"
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logEntry = "[$timestamp] $MacroName - Status: $Status - Details: $Details"
+    
+    try {
+        Add-Content -Path $logFile -Value $logEntry -ErrorAction SilentlyContinue
+    }
+    catch {
+        # Silent fail - nie powinna być blokująca
+    }
 }
 
 function New-AppFont {
@@ -352,6 +378,8 @@ function Get-OrWaitForSolidWorksApplication {
     param([int]$TimeoutSeconds = 10)
 
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    $retryCount = 0
+    
     do {
         $app = Get-ActiveSolidWorksApplication
         if ($null -ne $app) {
@@ -359,7 +387,8 @@ function Get-OrWaitForSolidWorksApplication {
         }
 
         Start-Sleep -Milliseconds 500
-    } while ((Get-Date) -lt $deadline)
+        $retryCount++
+    } while ((Get-Date) -lt $deadline -and $retryCount -lt 20)
 
     return $null
 }
@@ -739,6 +768,7 @@ function Show-MacroEditor {
 }
 
 try {
+    Initialize-Logging
     $config = Import-Config
 
     $form = New-Object System.Windows.Forms.Form
@@ -923,19 +953,26 @@ try {
 
         try {
             $statusLabel.Text = "Uruchamianie makra: $($macro.name)"
+            Write-MacroLog -MacroName $macro.name -Status "start" -Details "Mode: $($macro.launchMode)"
+            
             $runInfo = Invoke-SolidWorksMacro -Macro $macro -Config $config
+            
             if ($runInfo.fallbackMode -eq "menu-dialog") {
                 $statusLabel.Text = "Makro przekazane przez Narzedzia > Makro > Uruchom w otwartym SolidWorks: $($macro.name)"
+                Write-MacroLog -MacroName $macro.name -Status "success" -Details "Executed via menu dialog"
             }
             elseif ($runInfo.startedNow) {
                 $statusLabel.Text = "SolidWorks zostal uruchomiony i makro wystartowalo: $($macro.name)"
+                Write-MacroLog -MacroName $macro.name -Status "success" -Details "SolidWorks started with macro"
             }
             else {
                 $statusLabel.Text = "Makro uruchomione w otwartym SolidWorks: $($macro.name)"
+                Write-MacroLog -MacroName $macro.name -Status "success" -Details "Executed in running SolidWorks"
             }
         }
         catch {
             $statusLabel.Text = "Blad uruchamiania: $($_.Exception.Message)"
+            Write-MacroLog -MacroName $macro.name -Status "error" -Details $_.Exception.Message
             Show-Message -Text $_.Exception.Message -Title "Nie udalo sie uruchomic makra" -Icon Error
         }
     })
@@ -1019,9 +1056,11 @@ try {
         try {
             Save-Config -Config $config
             $statusLabel.Text = "Konfiguracja zapisana."
+            Write-MacroLog -MacroName "Config" -Status "saved" -Details "Configuration saved successfully"
         }
         catch {
             Show-Message -Text $_.Exception.Message -Title "Nie udalo sie zapisac konfiguracji" -Icon Error
+            Write-MacroLog -MacroName "Config" -Status "error" -Details $_.Exception.Message
         }
     })
 
