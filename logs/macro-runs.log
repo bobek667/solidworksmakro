@@ -20,3 +20,291 @@
 [2026-03-24 16:29:34] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
 [2026-03-24 16:29:37] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
 [2026-03-24 16:29:37] Export do PDF i DXF z rozpoznaniem - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:37:25] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:37:25] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:37:33] Rysunki do PDF i DXF v4 - Status: error - Details: SolidWorks jest uruchomiony, ale launcher nie moze nawiazac z nim polaczenia.
+[2026-03-24 16:37:41] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:37:41] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_only; SwProcessRunning=False
+[2026-03-24 16:37:41] Zapis czesci v4 - Status: error - Details: To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie.
+[2026-03-24 16:37:46] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
+[2026-03-24 16:37:46] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp; LaunchMode=attached_only; SwProcessRunning=False
+[2026-03-24 16:37:46] Export do PDF i DXF z rozpoznaniem - Status: error - Details: To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie.
+[2026-03-24 16:38:29] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:38:29] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:38:29] Rysunki do PDF i DXF v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:39:05] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:39:05] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_only; SwProcessRunning=True
+[2026-03-24 16:39:05] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:39:26] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
+[2026-03-24 16:39:26] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp; LaunchMode=attached_only; SwProcessRunning=True
+[2026-03-24 16:39:26] Export do PDF i DXF z rozpoznaniem - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:41:54] Launcher - Status: startup - Details: Build=2026-03-24 16:50; Root=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro
+[2026-03-24 16:42:45] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:42:45] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 16:42:45] Rysunki do PDF i DXF v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 16:42:46] Rysunki do PDF i DXF v4 - Status: success - Details: SolidWorks started with macro
+[2026-03-24 16:43:29] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:43:29] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_only; SwProcessRunning=False
+[2026-03-24 16:43:29] Zapis czesci v4 - Status: error - Details: To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie.
+[2026-03-24 16:44:08] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:44:08] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_only; SwProcessRunning=False
+[2026-03-24 16:44:08] Zapis czesci v4 - Status: error - Details: To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie.
+[2026-03-24 16:44:49] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
+[2026-03-24 16:44:49] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp; LaunchMode=attached_only; SwProcessRunning=False
+[2026-03-24 16:44:49] Export do PDF i DXF z rozpoznaniem - Status: error - Details: To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie.
+[2026-03-24 16:45:57] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:45:57] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:45:57] Rysunki do PDF i DXF v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:46:20] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:46:20] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_only; SwProcessRunning=True
+[2026-03-24 16:46:20] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:48:46] Launcher - Status: startup - Details: Build=2026-03-24 16:50; Root=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro
+[2026-03-24 16:48:58] Launcher - Status: startup - Details: Build=2026-03-24 16:50; Root=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro
+[2026-03-24 16:49:05] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:49:05] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 16:49:05] Rysunki do PDF i DXF v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 16:49:05] Rysunki do PDF i DXF v4 - Status: success - Details: SolidWorks started with macro
+[2026-03-24 16:50:19] Launcher - Status: startup - Details: Build=2026-03-24 16:50; Root=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro
+[2026-03-24 16:50:27] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:50:27] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:50:27] Rysunki do PDF i DXF v4 - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:50:27] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 16:50:27] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp
+[2026-03-24 16:50:28] Launcher - Status: trace - Details: Activate window: success via handle for PID=2408
+[2026-03-24 16:50:28] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 16:50:29] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 16:50:30] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 16:50:30] Rysunki do PDF i DXF v4 - Status: success - Details: Executed via menu dialog
+[2026-03-24 16:51:17] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:51:17] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:51:17] Zapis czesci v4 - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:51:17] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 16:51:17] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 16:51:18] Launcher - Status: trace - Details: Activate window: success via handle for PID=2408
+[2026-03-24 16:51:18] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 16:51:20] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 16:51:20] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 16:51:20] Zapis czesci v4 - Status: success - Details: Executed via menu dialog
+[2026-03-24 16:51:39] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:51:39] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:51:39] Zapis czesci v4 - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:51:39] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 16:51:39] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 16:51:40] Launcher - Status: trace - Details: Activate window: success via handle for PID=2408
+[2026-03-24 16:51:40] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 16:51:42] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 16:51:42] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 16:51:42] Zapis czesci v4 - Status: success - Details: Executed via menu dialog
+[2026-03-24 16:52:09] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:52:09] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:52:09] Zapis czesci v4 - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:52:09] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 16:52:09] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 16:52:09] Launcher - Status: trace - Details: Activate window: success via handle for PID=2408
+[2026-03-24 16:52:09] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 16:52:11] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 16:52:12] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 16:52:12] Zapis czesci v4 - Status: success - Details: Executed via menu dialog
+[2026-03-24 16:52:29] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:52:29] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 16:52:29] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:52:29] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 16:52:29] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 16:52:30] Launcher - Status: trace - Details: Activate window: success via handle for PID=2408
+[2026-03-24 16:52:30] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 16:52:32] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 16:52:32] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 16:52:32] Export do PDF i DXF z rozpoznaniem - Status: success - Details: Executed via menu dialog
+[2026-03-24 16:53:05] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:53:05] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 16:53:05] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 16:53:05] Export do PDF i DXF z rozpoznaniem - Status: success - Details: SolidWorks started with macro
+[2026-03-24 16:53:27] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:53:27] Rysunki do PDF i DXF v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunków pod pdf i pod dxf v4.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 16:53:27] Rysunki do PDF i DXF v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 16:53:27] Rysunki do PDF i DXF v4 - Status: success - Details: SolidWorks started with macro
+[2026-03-24 16:53:41] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:53:41] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 16:53:41] Zapis czesci v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 16:53:42] Zapis czesci v4 - Status: success - Details: SolidWorks started with macro
+[2026-03-24 17:01:20] Launcher - Status: startup - Details: Build=2026-03-24 16:50; Root=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro
+[2026-03-24 17:01:23] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 17:01:23] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 17:01:23] Zapis czesci v4 - Status: trace - Details: No running SolidWorks process. Starting app only because macro needs an opened document.
+[2026-03-24 17:01:29] Zapis czesci v4 - Status: info - Details: SolidWorks started only; waiting for user to open required document
+[2026-03-24 17:01:58] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 17:01:58] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 17:01:58] Zapis czesci v4 - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:01:58] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:01:58] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:01:59] Launcher - Status: trace - Details: Activate window: success via handle for PID=28380
+[2026-03-24 17:01:59] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 17:02:01] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 17:02:02] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 17:02:02] Zapis czesci v4 - Status: success - Details: Executed via menu dialog
+[2026-03-24 17:04:42] Launcher - Status: startup - Details: Build=2026-03-24 16:50; Root=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro
+[2026-03-24 17:04:47] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 17:04:47] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=False
+[2026-03-24 17:04:48] Zapis czesci v4 - Status: trace - Details: No running SolidWorks process. Starting app only because macro needs an opened document.
+[2026-03-24 17:04:53] Zapis czesci v4 - Status: info - Details: SolidWorks started only; waiting for user to open required document
+[2026-03-24 17:05:25] Zapis czesci v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 17:05:25] Zapis czesci v4 - Status: trace - Details: ResolvedPath=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp; LaunchMode=attached_or_start; SwProcessRunning=True
+[2026-03-24 17:05:25] Zapis czesci v4 - Status: trace - Details: Requirement check skipped after COM issue: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:05:25] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:05:25] Launcher - Status: trace - Details: Menu fallback start. Path=O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:05:26] Launcher - Status: trace - Details: Activate window: success via handle for PID=21032
+[2026-03-24 17:05:26] Launcher - Status: trace - Details: Sending Alt+N, M, U to SolidWorks
+[2026-03-24 17:05:27] Launcher - Status: trace - Details: Typing path into macro dialog
+[2026-03-24 17:05:28] Launcher - Status: trace - Details: Pressed Enter in macro dialog
+[2026-03-24 17:05:28] Zapis czesci v4 - Status: success - Details: Executed via menu dialog
+[2026-03-24 17:08:41] Zapis czesci v4 - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 17:09:04] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:09:05] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:09:22] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:09:23] Launcher - Status: trace - Details: Fallback open-macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:14:48] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:14:48] Launcher - Status: trace - Details: Fallback open-macro dialog through RunCommand for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:15:06] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:15:06] Launcher - Status: trace - Details: Fallback open-macro dialog through RunCommand for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 17:17:49] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks already running, but macro does not require active document. Starting a fresh SolidWorks instance with /m for stable execution.
+[2026-03-24 17:18:06] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:18:07] Launcher - Status: trace - Details: Fallback open-macro dialog through RunCommand for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 17:18:21] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:18:44] Rysunki do PDF i DXF v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 17:19:02] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks already running, but macro does not require active document. Starting a fresh SolidWorks instance with /m for stable execution.
+[2026-03-24 17:21:42] Rysunki do PDF i DXF v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 17:21:56] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:21:56] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:23:25] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:23:25] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:24:07] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:24:07] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:29:28] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:29:28] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:34:12] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:34:12] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:34:23] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:34:24] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 17:34:31] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:34:32] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:34:56] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:34:57] Launcher - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:39:36] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:39:37] Rysunki do PDF i DXF v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:42:09] Zapis czesci v4 - Status: trace - Details: Launcher requirement check skipped after COM mismatch: To makro wymaga otwartego dokumentu w SolidWorks.
+[2026-03-24 17:42:09] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:42:10] Zapis czesci v4 - Status: trace - Details: Trying active-document API to open macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:42:10] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:44:25] Zapis czesci v4 - Status: trace - Details: Launcher requirement check skipped after COM mismatch: To makro wymaga otwartego dokumentu w SolidWorks.
+[2026-03-24 17:44:25] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:44:26] Zapis czesci v4 - Status: trace - Details: Trying active-document API to open macro dialog for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:44:26] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:49:55] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:49:56] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:54:55] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:54:56] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:54:56] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:54:56] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:55:20] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:55:21] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:55:21] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:55:21] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:57:51] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:57:52] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:57:52] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:57:52] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:57:53] Zapis czesci v4 - Status: trace - Details: Using long Tools menu navigation: Macro is 7th from bottom for active assembly.
+[2026-03-24 17:58:09] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:58:10] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:58:10] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:58:10] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:58:11] Zapis czesci v4 - Status: trace - Details: Using long Tools menu navigation: Macro is 7th from bottom for active assembly.
+[2026-03-24 17:58:48] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:58:48] Rysunki do PDF i DXF v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:58:48] Rysunki do PDF i DXF v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:58:48] Rysunki do PDF i DXF v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 17:58:49] Rysunki do PDF i DXF v4 - Status: trace - Details: Using short Tools menu navigation.
+[2026-03-24 17:58:59] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:59:00] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:59:00] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:59:00] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 17:59:01] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: Using short Tools menu navigation.
+[2026-03-24 17:59:21] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 17:59:22] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 17:59:22] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 17:59:22] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 17:59:23] Zapis czesci v4 - Status: trace - Details: Using long Tools menu navigation: Macro is 7th from bottom for active assembly.
+[2026-03-24 18:01:08] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:01:09] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:01:09] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:01:09] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 18:01:10] Zapis czesci v4 - Status: trace - Details: Using long Tools menu navigation: Macro is 7th from bottom for active assembly.
+[2026-03-24 18:03:30] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:03:31] Rysunki do PDF i DXF v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:03:31] Rysunki do PDF i DXF v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:03:31] Rysunki do PDF i DXF v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 18:03:32] Rysunki do PDF i DXF v4 - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:03:39] Zapis czesci v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:03:40] Zapis czesci v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:03:40] Zapis czesci v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:03:40] Zapis czesci v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\MacroZapisuCzesciv4_dzialajacy.swp
+[2026-03-24 18:03:41] Zapis czesci v4 - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:03:49] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:03:49] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:03:49] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:03:49] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 18:03:50] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:04:03] Rysunki do PDF i DXF v4 - Status: trace - Details: No running SolidWorks process. Starting with /m switch.
+[2026-03-24 18:04:28] Zapis czesci v4 - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 18:04:53] Export do PDF i DXF z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:16:59] Add Bounding Box - Status: trace - Details: No running SolidWorks process. Starting SolidWorks without macro because document is required.
+[2026-03-24 18:18:09] Rysunki do PDF i DXF v4 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:18:10] Rysunki do PDF i DXF v4 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:18:10] Rysunki do PDF i DXF v4 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:18:10] Rysunki do PDF i DXF v4 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 18:18:11] Rysunki do PDF i DXF v4 - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:18:22] Assem 2 DXF v3 - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:18:23] Assem 2 DXF v3 - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:18:23] Assem 2 DXF v3 - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:18:23] Assem 2 DXF v3 - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Assem 2 DXF v3 Macro.swp
+[2026-03-24 18:18:24] Assem 2 DXF v3 - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:20:06] Fast BOM Export - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:20:06] Fast BOM Export - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:20:06] Fast BOM Export - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:20:06] Fast BOM Export - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Fast BOM Export.swp
+[2026-03-24 18:20:07] Fast BOM Export - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:21:38] Rename Virtual Components - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:21:39] Rename Virtual Components - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:21:39] Rename Virtual Components - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:21:39] Rename Virtual Components - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\RenameVirtualComponents.swp
+[2026-03-24 18:21:40] Rename Virtual Components - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:22:27] Export Each Sheet - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:22:27] Export Each Sheet - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:22:28] Export Each Sheet - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:22:28] Export Each Sheet - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\ExportEachSheet.swp
+[2026-03-24 18:22:29] Export Each Sheet - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:22:50] Save Cut List Parts - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:22:51] Save Cut List Parts - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:22:51] Save Cut List Parts - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:22:51] Save Cut List Parts - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\SaveCutListParts.swp
+[2026-03-24 18:22:52] Save Cut List Parts - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:23:00] Add Bounding Box - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:23:01] Add Bounding Box - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:23:01] Add Bounding Box - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:23:01] Add Bounding Box - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\AddBoundingBox.swp
+[2026-03-24 18:23:02] Add Bounding Box - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:24:16] Export Each Sheet - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:24:16] Export Each Sheet - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:24:16] Export Each Sheet - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:24:16] Export Each Sheet - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\ExportEachSheet.swp
+[2026-03-24 18:24:17] Export Each Sheet - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:42:23] Moje: Rysunki do PDF i DXF - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:42:24] Moje: Rysunki do PDF i DXF - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:42:24] Moje: Rysunki do PDF i DXF - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:42:24] Moje: Rysunki do PDF i DXF - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\Macro rysunkÃ³w pod pdf i pod dxf v4.swp
+[2026-03-24 18:42:25] Moje: Rysunki do PDF i DXF - Status: trace - Details: Using long Tools menu navigation because a document window is open.
+[2026-03-24 18:42:41] Moje: Export z rozpoznaniem - Status: trace - Details: SolidWorks process detected. Using menu-dialog fallback only.
+[2026-03-24 18:42:42] Moje: Export z rozpoznaniem - Status: trace - Details: ISldWorks.RunCommand(30) failed: Nie moÅ¼na odnaleÅºÄ‡ elementu. (WyjÄ…tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 18:42:42] Moje: Export z rozpoznaniem - Status: trace - Details: ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null.
+[2026-03-24 18:42:42] Moje: Export z rozpoznaniem - Status: trace - Details: Fallback open-macro dialog through menu navigation for path: O:\ONEDRIVE\Dokumenty\GitHub\solidworksmakro\macros\V1 - export do pdf i dxf z rozpoznaniem.swp
+[2026-03-24 18:42:43] Moje: Export z rozpoznaniem - Status: trace - Details: Using long Tools menu navigation because a document window is open.

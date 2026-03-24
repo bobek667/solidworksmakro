@@ -19,7 +19,6 @@ public static class Win32Native {
 
 $script:AppRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script:ConfigPath = Join-Path $script:AppRoot "macros.json"
-$script:LogDir = Join-Path $script:AppRoot "logs"
 $script:Colors = @{
     Background = [System.Drawing.ColorTranslator]::FromHtml("#F4F7FB")
     Surface = [System.Drawing.Color]::White
@@ -32,34 +31,35 @@ $script:Colors = @{
     Border = [System.Drawing.ColorTranslator]::FromHtml("#D7DFEA")
     Warning = [System.Drawing.ColorTranslator]::FromHtml("#9A6700")
 }
+$script:LogDirectory = Join-Path $script:AppRoot "logs"
+$script:LogPath = Join-Path $script:LogDirectory "macro-runs.log"
 
 function Initialize-Logging {
-    if (-not (Test-Path $script:LogDir)) {
-        New-Item -ItemType Directory -Path $script:LogDir -Force | Out-Null
+    if (-not (Test-Path -LiteralPath $script:LogDirectory)) {
+        [void](New-Item -ItemType Directory -Path $script:LogDirectory -Force)
     }
+
+    if (-not (Test-Path -LiteralPath $script:LogPath)) {
+        [System.IO.File]::WriteAllText($script:LogPath, "", [System.Text.Encoding]::UTF8)
+    }
+}
+
+function Get-MacroLogPath {
+    Initialize-Logging
+    return $script:LogPath
 }
 
 function Write-MacroLog {
     param(
         [string]$MacroName,
         [string]$Status,
-        [string]$Details = ""
+        [string]$Details
     )
-    
-    $logFile = Join-Path $script:LogDir "macro-runs.log"
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $logEntry = "[$timestamp] $MacroName - Status: $Status - Details: $Details"
-    
-    try {
-        Add-Content -Path $logFile -Value $logEntry -ErrorAction SilentlyContinue
-    }
-    catch {
-        # Silent fail - nie powinna być blokująca
-    }
-}
 
-function Get-MacroLogPath {
-    return (Join-Path $script:LogDir "macro-runs.log")
+    Initialize-Logging
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $line = "[{0}] {1} - Status: {2} - Details: {3}" -f $timestamp, $MacroName, $Status, $Details
+    Add-Content -LiteralPath $script:LogPath -Value $line -Encoding UTF8
 }
 
 function New-AppFont {
@@ -88,7 +88,20 @@ function Resolve-AppRelativePath {
 function Get-MacroResolvedPath {
     param([hashtable]$Macro)
 
-    return Resolve-AppRelativePath -Path ([string]$Macro.path)
+    $configuredPath = Resolve-AppRelativePath -Path ([string]$Macro.path)
+    if (-not [string]::IsNullOrWhiteSpace($configuredPath) -and (Test-Path -LiteralPath $configuredPath)) {
+        return $configuredPath
+    }
+
+    $fileName = [System.IO.Path]::GetFileName([string]$Macro.path)
+    if (-not [string]::IsNullOrWhiteSpace($fileName)) {
+        $macrosFolderPath = Join-Path (Join-Path $script:AppRoot "macros") $fileName
+        if (Test-Path -LiteralPath $macrosFolderPath) {
+            return $macrosFolderPath
+        }
+    }
+
+    return $configuredPath
 }
 
 function New-DefaultConfig {
@@ -96,7 +109,7 @@ function New-DefaultConfig {
     [void]$macros.Add(@{
         name = "Rysunki do PDF i DXF v4"
         description = "Eksport rysunkow do PDF i DXF."
-        path = ".\\Macro rysunków pod pdf i pod dxf v4.swp"
+        path = ".\\macros\\Macro rysunków pod pdf i pod dxf v4.swp"
         module = "Macro_rysunkow_pod_pdf_i_"
         procedure = "main"
         category = "Eksport"
@@ -107,23 +120,23 @@ function New-DefaultConfig {
     [void]$macros.Add(@{
         name = "Zapis czesci v4"
         description = "Zapis czesci z numerowaniem i podzialem na foldery."
-        path = ".\\MacroZapisuCzesciv4_dzialajacy.swp"
+        path = ".\\macros\\MacroZapisuCzesciv4_dzialajacy.swp"
         module = "MacroZapisuCzesciv41"
         procedure = "main"
         category = "Zapis"
-        launchMode = "attached_only"
+        launchMode = "attached_or_start"
         requiresOpenDoc = $true
         requiredDocType = "assembly"
-        requirements = "Wymaga otwartego zlozenia z wirtualnymi komponentami w juz uruchomionym SolidWorks."
+        requirements = "Przed uruchomieniem otworz w SolidWorks zlozenie z wirtualnymi komponentami. To makro pracuje na aktualnie otwartym zlozeniu."
     })
     [void]$macros.Add(@{
         name = "Export do PDF i DXF z rozpoznaniem"
         description = "Starsza wersja eksportu z rozpoznaniem."
-        path = ".\\V1 - export do pdf i dxf z rozpoznaniem.swp"
+        path = ".\\macros\\V1 - export do pdf i dxf z rozpoznaniem.swp"
         module = "V1__export_do_pdf_i_dxf_"
         procedure = "main"
         category = "Eksport"
-        launchMode = "attached_only"
+        launchMode = "attached_or_start"
         requiresOpenDoc = $true
         requirements = "Najlepiej uruchamiac przy juz otwartym odpowiednim pliku w SolidWorks."
     })
@@ -213,14 +226,26 @@ function Normalize-Config {
         if (-not $macro.ContainsKey("launchMode") -or [string]::IsNullOrWhiteSpace([string]$macro.launchMode)) {
             $macro.launchMode = "attached_or_start"
         }
+        elseif ([string]$macro.launchMode -eq "attached_only") {
+            $macro.launchMode = "attached_or_start"
+        }
         if (-not $macro.ContainsKey("requiresOpenDoc")) {
             $macro.requiresOpenDoc = $false
+        }
+        if (-not $macro.ContainsKey("requiredDocType")) {
+            $macro.requiredDocType = ""
         }
         if (-not $macro.ContainsKey("requirements")) {
             $macro.requirements = ""
         }
         if (-not $macro.ContainsKey("steps")) {
             $macro.steps = ""
+        }
+        if (-not $macro.ContainsKey("origin")) {
+            $macro.origin = ""
+        }
+        if (-not $macro.ContainsKey("sourceUrl")) {
+            $macro.sourceUrl = ""
         }
     }
 
@@ -254,6 +279,63 @@ function Get-MacroLabel {
     }
 
     return "[{0}] {1}" -f $Macro.category, $Macro.name
+}
+
+function Get-MacroGlyph {
+    param([hashtable]$Macro)
+
+    $category = ([string]$Macro.category).ToLowerInvariant()
+    $name = ([string]$Macro.name).ToLowerInvariant()
+
+    if ($name.Contains("moje: rysunki")) { return "PDF" }
+    if ($name.Contains("moje: zapis")) { return "NUM" }
+    if ($name.Contains("moje: export z rozpoznaniem")) { return "SEN" }
+    if ($name.Contains("pobrane:")) { return "DL" }
+    if ($name.Contains("bom")) { return "BOM" }
+    if ($name.Contains("dxf")) { return "DXF" }
+    if ($name.Contains("pdf")) { return "PDF" }
+    if ($name.Contains("sheet")) { return "SHT" }
+    if ($name.Contains("cut list") -or $name.Contains("cutlist")) { return "CUT" }
+    if ($name.Contains("bounding")) { return "BOX" }
+    if ($name.Contains("virtual")) { return "ASM" }
+
+    switch ($category) {
+        "eksport" { return "EXP" }
+        "zapis" { return "SAV" }
+        "rysunki" { return "DRW" }
+        "czesci" { return "PRT" }
+        "zlozenia" { return "ASM" }
+        "github" { return "GIT" }
+        default { return "MAC" }
+    }
+}
+
+function Get-MacroAccentColor {
+    param([hashtable]$Macro)
+
+    $category = ([string]$Macro.category).ToLowerInvariant()
+    $name = ([string]$Macro.name).ToLowerInvariant()
+
+    if ($name.Contains("moje: rysunki")) { return [System.Drawing.ColorTranslator]::FromHtml("#0A7A5A") }
+    if ($name.Contains("moje: zapis")) { return [System.Drawing.ColorTranslator]::FromHtml("#C26D00") }
+    if ($name.Contains("moje: export z rozpoznaniem")) { return [System.Drawing.ColorTranslator]::FromHtml("#0F5FDB") }
+    if ($name.Contains("pobrane:")) { return [System.Drawing.ColorTranslator]::FromHtml("#6B7280") }
+    if ($name.Contains("bom")) { return [System.Drawing.ColorTranslator]::FromHtml("#C26D00") }
+    if ($name.Contains("dxf")) { return [System.Drawing.ColorTranslator]::FromHtml("#0A7A5A") }
+    if ($name.Contains("pdf")) { return [System.Drawing.ColorTranslator]::FromHtml("#C0392B") }
+    if ($name.Contains("sheet")) { return [System.Drawing.ColorTranslator]::FromHtml("#00838F") }
+    if ($name.Contains("bounding")) { return [System.Drawing.ColorTranslator]::FromHtml("#8E5A00") }
+    if ($name.Contains("virtual")) { return [System.Drawing.ColorTranslator]::FromHtml("#7B1FA2") }
+
+    switch ($category) {
+        "eksport" { return [System.Drawing.ColorTranslator]::FromHtml("#0A7A5A") }
+        "zapis" { return [System.Drawing.ColorTranslator]::FromHtml("#C26D00") }
+        "rysunki" { return [System.Drawing.ColorTranslator]::FromHtml("#00838F") }
+        "czesci" { return [System.Drawing.ColorTranslator]::FromHtml("#8E5A00") }
+        "zlozenia" { return [System.Drawing.ColorTranslator]::FromHtml("#7B1FA2") }
+        "github" { return [System.Drawing.ColorTranslator]::FromHtml("#24292F") }
+        default { return $script:Colors.Primary }
+    }
 }
 
 function Show-Message {
@@ -367,6 +449,15 @@ function Start-SolidWorks {
     return $app
 }
 
+function Start-SolidWorksWithoutMacro {
+    $exePath = Get-SolidWorksExecutablePath
+    if ([string]::IsNullOrWhiteSpace($exePath)) {
+        throw "Nie znaleziono pliku SLDWORKS.exe. Sprawdz instalacje SolidWorks."
+    }
+
+    Start-Process -FilePath $exePath | Out-Null
+}
+
 function Start-SolidWorksWithMacroArgument {
     param([string]$MacroPath)
 
@@ -382,8 +473,6 @@ function Get-OrWaitForSolidWorksApplication {
     param([int]$TimeoutSeconds = 10)
 
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
-    $retryCount = 0
-    
     do {
         $app = Get-ActiveSolidWorksApplication
         if ($null -ne $app) {
@@ -391,8 +480,7 @@ function Get-OrWaitForSolidWorksApplication {
         }
 
         Start-Sleep -Milliseconds 500
-        $retryCount++
-    } while ((Get-Date) -lt $deadline -and $retryCount -lt 20)
+    } while ((Get-Date) -lt $deadline)
 
     return $null
 }
@@ -406,74 +494,233 @@ function Get-SolidWorksMainWindowProcess {
     return $candidates | Sort-Object StartTime -Descending | Select-Object -First 1
 }
 
-function Activate-SolidWorksWindow {
-    $proc = Get-SolidWorksMainWindowProcess
-    if ($null -eq $proc) {
+function Get-PreferredSolidWorksProcesses {
+    param([string]$RequiredDocType = "")
+
+    $processes = @(Get-Process -Name "SLDWORKS" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 })
+    if ($processes.Count -eq 0) {
+        return @()
+    }
+
+    $preferredPattern = switch ($RequiredDocType) {
+        "assembly" { ".SLDASM" }
+        "part" { ".SLDPRT" }
+        "drawing" { ".SLDDRW" }
+        default { "" }
+    }
+
+    $genericPatterns = @(".SLDASM", ".SLDPRT", ".SLDDRW")
+
+    return @(
+        $processes |
+        Sort-Object `
+            @{ Expression = {
+                    $title = [string]$_.MainWindowTitle
+                    if (-not [string]::IsNullOrWhiteSpace($preferredPattern) -and $title.ToUpperInvariant().Contains($preferredPattern)) {
+                        0
+                    }
+                    elseif ($genericPatterns | Where-Object { $title.ToUpperInvariant().Contains($_) }) {
+                        1
+                    }
+                    else {
+                        2
+                    }
+                }
+            }, `
+            @{ Expression = { $_.StartTime }; Descending = $true }
+    )
+}
+
+function Test-SolidWorksDocumentWindowOpen {
+    $processes = @(Get-PreferredSolidWorksProcesses)
+    if ($processes.Count -eq 0) {
+        return $false
+    }
+
+    foreach ($proc in $processes) {
+        $title = [string]$proc.MainWindowTitle
+        $upper = $title.ToUpperInvariant()
+        if ($upper.Contains(".SLDASM") -or $upper.Contains(".SLDPRT") -or $upper.Contains(".SLDDRW")) {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Try-OpenMacroDialogViaCommand {
+    param(
+        $SwApp,
+        [string]$MacroName
+    )
+
+    if ($null -eq $SwApp) {
+        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "RunCommand skipped because COM app object is null."
         return $false
     }
 
     try {
-        $hWnd = [IntPtr]::new([int64]$proc.MainWindowHandle)
-        if ($hWnd -eq [IntPtr]::Zero) {
+        $result = $SwApp.RunCommand(30, "")
+        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ISldWorks.RunCommand(30) returned: $result"
+        if ($result) {
+            return $true
+        }
+    }
+    catch {
+        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ISldWorks.RunCommand(30) failed: $($_.Exception.Message)"
+    }
+
+    try {
+        $activeDoc = $SwApp.ActiveDoc
+        if ($null -eq $activeDoc) {
+            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ModelDocExtension.RunCommand(30) skipped because ActiveDoc is null."
             return $false
         }
 
-        if ([Win32Native]::IsIconic($hWnd)) {
-            [void][Win32Native]::ShowWindowAsync($hWnd, 9)
-            Start-Sleep -Milliseconds 250
-        }
-        else {
-            [void][Win32Native]::ShowWindowAsync($hWnd, 5)
-            Start-Sleep -Milliseconds 150
+        $extension = $activeDoc.Extension
+        if ($null -eq $extension) {
+            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "ModelDocExtension.RunCommand(30) skipped because Extension is null."
+            return $false
         }
 
+        $result = $extension.RunCommand(30, "")
+        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "IModelDocExtension.RunCommand(30) returned: $result"
+        return [bool]$result
+    }
+    catch {
+        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "IModelDocExtension.RunCommand(30) failed: $($_.Exception.Message)"
+        return $false
+    }
+}
+
+function Activate-SolidWorksWindow {
+    param([string]$RequiredDocType = "")
+
+    $shell = $null
+    try {
         $shell = New-Object -ComObject WScript.Shell
-        [void]$shell.AppActivate($proc.Id)
-        Start-Sleep -Milliseconds 250
-        [void][Win32Native]::SetForegroundWindow($hWnd)
-        Start-Sleep -Milliseconds 350
-        return $true
+        $processes = @(Get-PreferredSolidWorksProcesses -RequiredDocType $RequiredDocType)
+        if ($processes.Count -eq 0) {
+            return $false
+        }
+
+        foreach ($proc in $processes) {
+            try {
+                if ($proc.MainWindowHandle -ne 0) {
+                    $hWnd = [IntPtr]::new([int64]$proc.MainWindowHandle)
+                    if ($hWnd -ne [IntPtr]::Zero) {
+                        if ([Win32Native]::IsIconic($hWnd)) {
+                            [void][Win32Native]::ShowWindowAsync($hWnd, 9)
+                        }
+                        else {
+                            [void][Win32Native]::ShowWindowAsync($hWnd, 5)
+                        }
+                        Start-Sleep -Milliseconds 200
+                        [void]$shell.AppActivate($proc.Id)
+                        Start-Sleep -Milliseconds 200
+                        [void][Win32Native]::SetForegroundWindow($hWnd)
+                        Start-Sleep -Milliseconds 300
+                        return $true
+                    }
+                }
+            }
+            catch {
+            }
+        }
+
+        foreach ($proc in $processes) {
+            try {
+                if ($shell.AppActivate($proc.Id)) {
+                    Start-Sleep -Milliseconds 300
+                    return $true
+                }
+            }
+            catch {
+            }
+        }
+
+        foreach ($title in @("SOLIDWORKS", "SolidWorks", "DS SOLIDWORKS")) {
+            try {
+                if ($shell.AppActivate($title)) {
+                    Start-Sleep -Milliseconds 300
+                    return $true
+                }
+            }
+            catch {
+            }
+        }
+
+        return $false
     }
     catch {
         return $false
     }
 }
 
-function Escape-SendKeysText {
-    param([string]$Text)
-
-    $escaped = $Text.Replace("{", "{{}")
-    foreach ($ch in @("+","^","%","~","(",")","[","]")) {
-        $escaped = $escaped.Replace($ch, "{$ch}")
-    }
-    return $escaped
-}
-
 function Invoke-SolidWorksRunDialogFallback {
-    param([string]$MacroPath)
+    param(
+        [string]$MacroPath,
+        [string]$MacroName = "Launcher",
+        [string]$RequiredDocType = "",
+        $SwApp = $null
+    )
 
-    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Menu fallback start. Path=$MacroPath"
-    if (-not (Activate-SolidWorksWindow)) {
-        Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Activate-SolidWorksWindow failed"
+    if (-not (Activate-SolidWorksWindow -RequiredDocType $RequiredDocType)) {
         throw "Nie udalo sie aktywowac glownego okna SolidWorks."
     }
 
     $shell = New-Object -ComObject WScript.Shell
-    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Sending Alt+N, M, U to SolidWorks"
-    Start-Sleep -Milliseconds 450
+    $dialogOpened = $false
+
+    if ($null -ne $SwApp) {
+        $dialogOpened = Try-OpenMacroDialogViaCommand -SwApp $SwApp -MacroName $MacroName
+    }
+
+    if (-not $dialogOpened) {
+        Write-MacroLog -MacroName $MacroName -Status "trace" -Details "Fallback open-macro dialog through menu navigation for path: $MacroPath"
+        $useLongToolsMenu = Test-SolidWorksDocumentWindowOpen
+        Start-Sleep -Milliseconds 450
+        $shell.SendKeys("{ESC}")
+        Start-Sleep -Milliseconds 120
+        $shell.SendKeys("{ESC}")
+        Start-Sleep -Milliseconds 180
+        $shell.SendKeys("%n")
+        Start-Sleep -Milliseconds 260
+        if ($useLongToolsMenu) {
+            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "Using long Tools menu navigation because a document window is open."
+            $shell.SendKeys("{END}")
+            Start-Sleep -Milliseconds 220
+            for ($i = 0; $i -lt 7; $i++) {
+                $shell.SendKeys("{UP}")
+                Start-Sleep -Milliseconds 90
+            }
+        }
+        else {
+            Write-MacroLog -MacroName $MacroName -Status "trace" -Details "Using short Tools menu navigation."
+            $shell.SendKeys("m")
+            Start-Sleep -Milliseconds 220
+        }
+        $shell.SendKeys("{RIGHT}")
+        Start-Sleep -Milliseconds 220
+        $shell.SendKeys("{DOWN}")
+        Start-Sleep -Milliseconds 90
+        $shell.SendKeys("{DOWN}")
+        Start-Sleep -Milliseconds 90
+        $shell.SendKeys("{DOWN}")
+        Start-Sleep -Milliseconds 180
+        $shell.SendKeys("{ENTER}")
+        Start-Sleep -Milliseconds 950
+    }
+
     $shell.SendKeys("%n")
-    Start-Sleep -Milliseconds 250
-    $shell.SendKeys("m")
-    Start-Sleep -Milliseconds 250
-    $shell.SendKeys("u")
-    Start-Sleep -Milliseconds 900
-    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Typing path into macro dialog"
+    Start-Sleep -Milliseconds 120
     $shell.SendKeys("^a")
     Start-Sleep -Milliseconds 120
-    $shell.SendKeys((Escape-SendKeysText -Text $MacroPath))
+    [System.Windows.Forms.Clipboard]::SetText($MacroPath)
+    Start-Sleep -Milliseconds 120
+    $shell.SendKeys("^v")
     Start-Sleep -Milliseconds 180
     $shell.SendKeys("{ENTER}")
-    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Pressed Enter in macro dialog"
 }
 
 function Get-SwDocumentTypeName {
@@ -532,10 +779,6 @@ function Invoke-SolidWorksMacro {
         throw "Nie znaleziono pliku makra:`n$macroPath"
     }
 
-    if ([string]::IsNullOrWhiteSpace([string]$Macro.module) -or [string]::IsNullOrWhiteSpace([string]$Macro.procedure)) {
-        throw "Dla tego makra brakuje nazwy modulu lub procedury startowej. Uzupelnij te pola w edycji makra."
-    }
-
     $launchMode = [string]$Macro.launchMode
     if ([string]::IsNullOrWhiteSpace($launchMode)) {
         $launchMode = "attached_or_start"
@@ -544,11 +787,12 @@ function Invoke-SolidWorksMacro {
     $swProcessRunning = Test-SolidWorksProcessRunning
     $startedNow = $false
     $primaryError = $null
-    Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "ResolvedPath=$macroPath; LaunchMode=$launchMode; SwProcessRunning=$swProcessRunning"
 
     if (-not $swProcessRunning) {
-        if ($launchMode -eq "attached_only") {
-            throw "To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie."
+        if ([bool]$Macro.requiresOpenDoc) {
+            Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "No running SolidWorks process. Starting SolidWorks without macro because document is required."
+            Start-SolidWorksWithoutMacro
+            return @{ startedNow = $true; fallbackMode = "start-only" }
         }
 
         Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "No running SolidWorks process. Starting with /m switch."
@@ -556,17 +800,10 @@ function Invoke-SolidWorksMacro {
         return @{ startedNow = $true; fallbackMode = "startup-switch" }
     }
 
-    $swApp = Get-OrWaitForSolidWorksApplication -TimeoutSeconds 8
-    if ($null -eq $swApp) {
-        throw "SolidWorks jest uruchomiony, ale launcher nie moze nawiazac z nim polaczenia."
-    }
-
-    $swApp.Visible = [bool]$Config.solidworks.visible
-    Assert-MacroRequirements -Macro $Macro -SwApp $swApp
-
+    $swApp = Get-OrWaitForSolidWorksApplication -TimeoutSeconds 10
     try {
         Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "SolidWorks process detected. Using menu-dialog fallback only."
-        Invoke-SolidWorksRunDialogFallback -MacroPath $macroPath
+        Invoke-SolidWorksRunDialogFallback -MacroPath $macroPath -MacroName $Macro.name -RequiredDocType ([string]$Macro.requiredDocType) -SwApp $swApp
         return @{ startedNow = $startedNow; fallbackMode = "menu-dialog" }
     }
     catch {
@@ -736,7 +973,6 @@ function Show-MacroEditor {
 }
 
 try {
-    Initialize-Logging
     $config = Import-Config
 
     $form = New-Object System.Windows.Forms.Form
@@ -775,11 +1011,22 @@ try {
     $leftTitle.Text = "Biblioteka makr"; $leftTitle.Left = 16; $leftTitle.Top = 14; $leftTitle.Width = 200
     $leftTitle.Font = New-AppFont -Size 11 -Style Bold
 
+    $btnFilterAll = New-Object System.Windows.Forms.Button
+    $btnFilterAll.Text = "Wszystkie"; $btnFilterAll.Left = 16; $btnFilterAll.Top = 44; $btnFilterAll.Width = 92; $btnFilterAll.Height = 28
+
+    $btnFilterMine = New-Object System.Windows.Forms.Button
+    $btnFilterMine.Text = "Moje"; $btnFilterMine.Left = 114; $btnFilterMine.Top = 44; $btnFilterMine.Width = 72; $btnFilterMine.Height = 28
+
+    $btnFilterDownloaded = New-Object System.Windows.Forms.Button
+    $btnFilterDownloaded.Text = "Pobrane"; $btnFilterDownloaded.Left = 192; $btnFilterDownloaded.Top = 44; $btnFilterDownloaded.Width = 88; $btnFilterDownloaded.Height = 28
+
     $listBox = New-Object System.Windows.Forms.ListBox
-    $listBox.Left = 16; $listBox.Top = 46; $listBox.Width = 306; $listBox.Height = 350
+    $listBox.Left = 12; $listBox.Top = 82; $listBox.Width = 314; $listBox.Height = 314
     $listBox.BorderStyle = [System.Windows.Forms.BorderStyle]::None
     $listBox.BackColor = $script:Colors.Surface; $listBox.ForeColor = $script:Colors.Text
     $listBox.Font = New-AppFont -Size 10; $listBox.IntegralHeight = $false; $listBox.Anchor = "Top,Bottom,Left,Right"
+    $listBox.DrawMode = [System.Windows.Forms.DrawMode]::OwnerDrawFixed
+    $listBox.ItemHeight = 82
 
     $rightPanel = New-Object System.Windows.Forms.Panel
     $rightPanel.Left = 380; $rightPanel.Top = 114; $rightPanel.Width = 658; $rightPanel.Height = 500
@@ -836,32 +1083,78 @@ try {
     $btnSaveConfig.Text = "Zapisz konfiguracje"; $btnSaveConfig.Left = 460; $btnSaveConfig.Top = 416; $btnSaveConfig.Width = 178; $btnSaveConfig.Height = 42
     $btnSaveConfig.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Question); $btnSaveConfig.Anchor = "Right,Bottom"
 
-    $btnShowLog = New-Object System.Windows.Forms.Button
-    $btnShowLog.Text = "Pokaz log"; $btnShowLog.Left = 460; $btnShowLog.Top = 368; $btnShowLog.Width = 178; $btnShowLog.Height = 38
-    $btnShowLog.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Information); $btnShowLog.Anchor = "Right,Bottom"
-
     Set-PrimaryButtonStyle -Button $btnRun
-    foreach ($button in @($btnOpenFile, $btnOpenFolder, $btnAdd, $btnEdit, $btnDelete, $btnSaveConfig, $btnShowLog)) {
+    foreach ($button in @($btnOpenFile, $btnOpenFolder, $btnAdd, $btnEdit, $btnDelete, $btnSaveConfig, $btnFilterAll, $btnFilterMine, $btnFilterDownloaded)) {
         Set-ButtonStyle -Button $button
+    }
+
+    $script:macroFilter = "all"
+    $script:displayedMacros = [System.Collections.ArrayList]::new()
+
+    function Test-MacroMatchesFilter {
+        param(
+            [hashtable]$Macro,
+            [string]$Filter
+        )
+
+        $name = ([string]$Macro.name).ToLowerInvariant()
+        switch ($Filter) {
+            "mine" { return $name.StartsWith("moje:") }
+            "downloaded" { return $name.StartsWith("pobrane:") }
+            default { return $true }
+        }
+    }
+
+    function Update-FilterButtons {
+        foreach ($btn in @($btnFilterAll, $btnFilterMine, $btnFilterDownloaded)) {
+            Set-ButtonStyle -Button $btn
+        }
+
+        switch ($script:macroFilter) {
+            "mine" { Set-PrimaryButtonStyle -Button $btnFilterMine }
+            "downloaded" { Set-PrimaryButtonStyle -Button $btnFilterDownloaded }
+            default { Set-PrimaryButtonStyle -Button $btnFilterAll }
+        }
     }
 
     function Get-SelectedMacro {
         if ($listBox.SelectedIndex -lt 0) { return $null }
-        return [hashtable]$config.macros[$listBox.SelectedIndex]
+        return [hashtable]$script:displayedMacros[$listBox.SelectedIndex]
     }
 
     function Refresh-MacroList {
+        $selectedName = $null
+        if ($listBox.SelectedIndex -ge 0 -and $listBox.SelectedIndex -lt $script:displayedMacros.Count) {
+            $selectedName = [string]([hashtable]$script:displayedMacros[$listBox.SelectedIndex]).name
+        }
+
+        $script:displayedMacros = [System.Collections.ArrayList]::new()
         $listBox.Items.Clear()
         foreach ($macro in $config.macros) {
-            [void]$listBox.Items.Add((Get-MacroLabel -Macro ([hashtable]$macro)))
+            $macroHash = [hashtable]$macro
+            if (Test-MacroMatchesFilter -Macro $macroHash -Filter $script:macroFilter) {
+                [void]$script:displayedMacros.Add($macroHash)
+                [void]$listBox.Items.Add($macroHash)
+            }
         }
 
         if ($listBox.Items.Count -gt 0) {
-            if ($listBox.SelectedIndex -lt 0) { $listBox.SelectedIndex = 0 }
+            $newIndex = 0
+            if (-not [string]::IsNullOrWhiteSpace($selectedName)) {
+                for ($i = 0; $i -lt $script:displayedMacros.Count; $i++) {
+                    if ([string]([hashtable]$script:displayedMacros[$i]).name -eq $selectedName) {
+                        $newIndex = $i
+                        break
+                    }
+                }
+            }
+            $listBox.SelectedIndex = $newIndex
         }
         else {
             $detailsBox.Text = "Brak makr w konfiguracji."
         }
+
+        Update-FilterButtons
     }
 
     function Update-Details {
@@ -890,11 +1183,26 @@ try {
             $macro.description,
             "",
             "Sciezka:",
-            $resolvedPath,
-            "",
-            "Modul VBA: $($macro.module)",
-            "Procedura startowa: $($macro.procedure)"
+            $resolvedPath
         )
+
+        if (-not [string]::IsNullOrWhiteSpace([string]$macro.origin)) {
+            $lines += ""
+            $lines += "Pochodzenie:"
+            $lines += $macro.origin
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace([string]$macro.sourceUrl)) {
+            $lines += ""
+            $lines += "Zrodlo:"
+            $lines += [string]$macro.sourceUrl
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace([string]$macro.module) -or -not [string]::IsNullOrWhiteSpace([string]$macro.procedure)) {
+            $lines += ""
+            $lines += "Modul VBA: $($macro.module)"
+            $lines += "Procedura startowa: $($macro.procedure)"
+        }
 
         if (-not [string]::IsNullOrWhiteSpace([string]$macro.requirements)) {
             $lines += ""
@@ -913,8 +1221,88 @@ try {
         $detailsBox.Text = ($lines -join [Environment]::NewLine)
     }
 
+    $listBox.Add_DrawItem({
+        param($sender, $e)
+
+        if ($e.Index -lt 0 -or $e.Index -ge $script:displayedMacros.Count) {
+            return
+        }
+
+        $macro = [hashtable]$script:displayedMacros[$e.Index]
+        $accent = Get-MacroAccentColor -Macro $macro
+        $glyph = Get-MacroGlyph -Macro $macro
+        $bounds = $e.Bounds
+
+        $e.DrawBackground()
+        $e.Graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+
+        $cardRect = New-Object System.Drawing.Rectangle ($bounds.Left + 4), ($bounds.Top + 4), ($bounds.Width - 8), ($bounds.Height - 8)
+        $cardColor = if (($e.State -band [System.Windows.Forms.DrawItemState]::Selected) -eq [System.Windows.Forms.DrawItemState]::Selected) {
+            [System.Drawing.ColorTranslator]::FromHtml("#E8F0FF")
+        } else {
+            [System.Drawing.Color]::White
+        }
+
+        $cardBrush = New-Object System.Drawing.SolidBrush($cardColor)
+        $borderPen = New-Object System.Drawing.Pen($script:Colors.Border)
+        $e.Graphics.FillRectangle($cardBrush, $cardRect)
+        $e.Graphics.DrawRectangle($borderPen, $cardRect)
+
+        $iconRect = New-Object System.Drawing.Rectangle ($cardRect.Left + 12), ($cardRect.Top + 14), 44, 44
+        $iconBrush = New-Object System.Drawing.SolidBrush($accent)
+        $e.Graphics.FillEllipse($iconBrush, $iconRect)
+
+        $glyphFont = New-AppFont -Size 9 -Style Bold
+        $glyphBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+        $glyphSize = $e.Graphics.MeasureString($glyph, $glyphFont)
+        $glyphX = [single]($iconRect.Left + (($iconRect.Width - $glyphSize.Width) / 2))
+        $glyphY = [single]($iconRect.Top + (($iconRect.Height - $glyphSize.Height) / 2))
+        $e.Graphics.DrawString($glyph, $glyphFont, $glyphBrush, $glyphX, $glyphY)
+
+        $titleFont = New-AppFont -Size 10.5 -Style Bold
+        $bodyFont = New-AppFont -Size 8.6
+        $metaFont = New-AppFont -Size 8 -Style Bold
+        $textBrush = New-Object System.Drawing.SolidBrush($script:Colors.Text)
+        $mutedBrush = New-Object System.Drawing.SolidBrush($script:Colors.Muted)
+
+        $titleX = $iconRect.Right + 12
+        $titleY = $cardRect.Top + 10
+        $e.Graphics.DrawString([string]$macro.name, $titleFont, $textBrush, $titleX, $titleY)
+
+        $chipText = if ([string]::IsNullOrWhiteSpace([string]$macro.category)) { "Makro" } else { [string]$macro.category }
+        $chipSize = $e.Graphics.MeasureString($chipText, $metaFont)
+        $chipRect = New-Object System.Drawing.RectangleF ($titleX), ($cardRect.Top + 32), ([Math]::Min(110, $chipSize.Width + 16)), 18
+        $chipBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(20, $accent))
+        $chipBorderPen = New-Object System.Drawing.Pen($accent)
+        $e.Graphics.FillRectangle($chipBrush, $chipRect)
+        $e.Graphics.DrawRectangle($chipBorderPen, [System.Drawing.Rectangle]::Round($chipRect))
+        $e.Graphics.DrawString($chipText, $metaFont, (New-Object System.Drawing.SolidBrush($accent)), $chipRect.X + 8, $chipRect.Y + 2)
+
+        $description = [string]$macro.description
+        if ($description.Length -gt 58) { $description = $description.Substring(0, 55) + "..." }
+        $e.Graphics.DrawString($description, $bodyFont, $mutedBrush, $titleX, ($cardRect.Top + 54))
+
+        $cardBrush.Dispose()
+        $borderPen.Dispose()
+        $iconBrush.Dispose()
+        $glyphBrush.Dispose()
+        $textBrush.Dispose()
+        $mutedBrush.Dispose()
+        $chipBrush.Dispose()
+        $chipBorderPen.Dispose()
+        $glyphFont.Dispose()
+        $titleFont.Dispose()
+        $bodyFont.Dispose()
+        $metaFont.Dispose()
+
+        $e.DrawFocusRectangle()
+    })
+
     $chkVisible.Add_CheckedChanged({ $config.solidworks.visible = $chkVisible.Checked })
     $listBox.Add_SelectedIndexChanged({ Update-Details })
+    $btnFilterAll.Add_Click({ $script:macroFilter = "all"; Refresh-MacroList })
+    $btnFilterMine.Add_Click({ $script:macroFilter = "mine"; Refresh-MacroList })
+    $btnFilterDownloaded.Add_Click({ $script:macroFilter = "downloaded"; Refresh-MacroList })
 
     $btnRun.Add_Click({
         $macro = Get-SelectedMacro
@@ -925,26 +1313,23 @@ try {
 
         try {
             $statusLabel.Text = "Uruchamianie makra: $($macro.name)"
-            Write-MacroLog -MacroName $macro.name -Status "start" -Details "Mode: $($macro.launchMode)"
-            
             $runInfo = Invoke-SolidWorksMacro -Macro $macro -Config $config
-            
-            if ($runInfo.fallbackMode -eq "menu-dialog") {
+            if ($runInfo.fallbackMode -eq "start-only") {
+                $statusLabel.Text = "SolidWorks zostal uruchomiony. Otworz wymagany dokument i kliknij ponownie: $($macro.name)"
+                Show-Message -Text "SolidWorks zostal uruchomiony, ale to makro wymaga juz otwartego dokumentu.`n`nOtworz teraz odpowiedni plik w SolidWorks i kliknij 'Uruchom w SolidWorks' jeszcze raz." -Title "Najpierw otworz dokument" -Icon Information
+            }
+            elseif ($runInfo.fallbackMode -eq "menu-dialog") {
                 $statusLabel.Text = "Makro przekazane przez Narzedzia > Makro > Uruchom w otwartym SolidWorks: $($macro.name)"
-                Write-MacroLog -MacroName $macro.name -Status "success" -Details "Executed via menu dialog"
             }
             elseif ($runInfo.startedNow) {
                 $statusLabel.Text = "SolidWorks zostal uruchomiony i makro wystartowalo: $($macro.name)"
-                Write-MacroLog -MacroName $macro.name -Status "success" -Details "SolidWorks started with macro"
             }
             else {
                 $statusLabel.Text = "Makro uruchomione w otwartym SolidWorks: $($macro.name)"
-                Write-MacroLog -MacroName $macro.name -Status "success" -Details "Executed in running SolidWorks"
             }
         }
         catch {
             $statusLabel.Text = "Blad uruchamiania: $($_.Exception.Message)"
-            Write-MacroLog -MacroName $macro.name -Status "error" -Details $_.Exception.Message
             Show-Message -Text $_.Exception.Message -Title "Nie udalo sie uruchomic makra" -Icon Error
         }
     })
@@ -1028,32 +1413,15 @@ try {
         try {
             Save-Config -Config $config
             $statusLabel.Text = "Konfiguracja zapisana."
-            Write-MacroLog -MacroName "Config" -Status "saved" -Details "Configuration saved successfully"
         }
         catch {
             Show-Message -Text $_.Exception.Message -Title "Nie udalo sie zapisac konfiguracji" -Icon Error
-            Write-MacroLog -MacroName "Config" -Status "error" -Details $_.Exception.Message
-        }
-    })
-
-    $btnShowLog.Add_Click({
-        try {
-            $logPath = Get-MacroLogPath
-            if (-not (Test-Path -LiteralPath $logPath)) {
-                Show-Message -Text "Plik logu jeszcze nie istnieje." -Title "Brak logu" -Icon Warning
-                return
-            }
-
-            Start-Process notepad.exe -ArgumentList "`"$logPath`""
-        }
-        catch {
-            Show-Message -Text $_.Exception.Message -Title "Nie udalo sie otworzyc logu" -Icon Error
         }
     })
 
     foreach ($control in @($headerIcon, $headerTitle, $headerSubtitle)) { $headerPanel.Controls.Add($control) }
     foreach ($control in @($leftTitle, $listBox, $btnAdd, $btnEdit, $btnDelete)) { $leftPanel.Controls.Add($control) }
-    foreach ($control in @($detailsTitle, $detailsBox, $chkVisible, $hintLabel, $btnRun, $btnOpenFile, $btnOpenFolder, $btnShowLog, $btnSaveConfig)) { $rightPanel.Controls.Add($control) }
+    foreach ($control in @($detailsTitle, $detailsBox, $chkVisible, $hintLabel, $btnRun, $btnOpenFile, $btnOpenFolder, $btnSaveConfig)) { $rightPanel.Controls.Add($control) }
     foreach ($control in @($headerPanel, $leftPanel, $rightPanel, $statusLabel)) { $form.Controls.Add($control) }
 
     Refresh-MacroList
