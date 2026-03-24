@@ -1,0 +1,16 @@
+[2026-03-24 16:16:13] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:16:13] Rysunki do PDF i DXF v4 - Status: success - Details: SolidWorks started with macro
+[2026-03-24 16:16:27] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:16:27] Rysunki do PDF i DXF v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:16:32] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:16:32] Rysunki do PDF i DXF v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:17:23] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:17:23] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:17:28] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
+[2026-03-24 16:17:29] Export do PDF i DXF z rozpoznaniem - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:26:12] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:26:12] Rysunki do PDF i DXF v4 - Status: success - Details: SolidWorks started with macro
+[2026-03-24 16:26:36] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:26:36] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:26:56] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
+[2026-03-24 16:26:56] Export do PDF i DXF z rozpoznaniem - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
