@@ -58,6 +58,10 @@ function Write-MacroLog {
     }
 }
 
+function Get-MacroLogPath {
+    return (Join-Path $script:LogDir "macro-runs.log")
+}
+
 function New-AppFont {
     param(
         [float]$Size = 9,
@@ -448,11 +452,14 @@ function Escape-SendKeysText {
 function Invoke-SolidWorksRunDialogFallback {
     param([string]$MacroPath)
 
+    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Menu fallback start. Path=$MacroPath"
     if (-not (Activate-SolidWorksWindow)) {
+        Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Activate-SolidWorksWindow failed"
         throw "Nie udalo sie aktywowac glownego okna SolidWorks."
     }
 
     $shell = New-Object -ComObject WScript.Shell
+    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Sending Alt+N, M, U to SolidWorks"
     Start-Sleep -Milliseconds 450
     $shell.SendKeys("%n")
     Start-Sleep -Milliseconds 250
@@ -460,11 +467,13 @@ function Invoke-SolidWorksRunDialogFallback {
     Start-Sleep -Milliseconds 250
     $shell.SendKeys("u")
     Start-Sleep -Milliseconds 900
+    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Typing path into macro dialog"
     $shell.SendKeys("^a")
     Start-Sleep -Milliseconds 120
     $shell.SendKeys((Escape-SendKeysText -Text $MacroPath))
     Start-Sleep -Milliseconds 180
     $shell.SendKeys("{ENTER}")
+    Write-MacroLog -MacroName "Launcher" -Status "trace" -Details "Pressed Enter in macro dialog"
 }
 
 function Get-SwDocumentTypeName {
@@ -533,79 +542,38 @@ function Invoke-SolidWorksMacro {
     }
 
     $swProcessRunning = Test-SolidWorksProcessRunning
-    $swApp = $null
     $startedNow = $false
-    $usedDialogFallback = $false
     $primaryError = $null
-    $errorCode = 0
+    Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "ResolvedPath=$macroPath; LaunchMode=$launchMode; SwProcessRunning=$swProcessRunning"
 
     if (-not $swProcessRunning) {
         if ($launchMode -eq "attached_only") {
             throw "To makro wymaga juz uruchomionego SolidWorks. Otworz SolidWorks i wymagany dokument, a potem sprobuj ponownie."
         }
 
+        Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "No running SolidWorks process. Starting with /m switch."
         Start-SolidWorksWithMacroArgument -MacroPath $macroPath
         return @{ startedNow = $true; fallbackMode = "startup-switch" }
     }
 
     $swApp = Get-OrWaitForSolidWorksApplication -TimeoutSeconds 8
-
-    if ($null -ne $swApp) {
-        $swApp.Visible = [bool]$Config.solidworks.visible
-
-        try {
-            Assert-MacroRequirements -Macro $Macro -SwApp $swApp
-        }
-        catch {
-            throw
-        }
-
-        $options = 1
-        $result = $false
-
-        try {
-            $result = $swApp.RunMacro2($macroPath, [string]$Macro.module, [string]$Macro.procedure, $options, [ref]$errorCode)
-        }
-        catch {
-            $primaryError = $_.Exception.Message
-        }
-
-        if (-not $result) {
-            try {
-                $result = $swApp.RunMacro($macroPath, [string]$Macro.module, [string]$Macro.procedure)
-            }
-            catch {
-                if ($null -eq $primaryError) {
-                    $primaryError = $_.Exception.Message
-                }
-            }
-        }
-
-        if ($result) {
-            return @{ startedNow = $startedNow; fallbackMode = "" }
-        }
+    if ($null -eq $swApp) {
+        throw "SolidWorks jest uruchomiony, ale launcher nie moze nawiazac z nim polaczenia."
     }
+
+    $swApp.Visible = [bool]$Config.solidworks.visible
+    Assert-MacroRequirements -Macro $Macro -SwApp $swApp
 
     try {
+        Write-MacroLog -MacroName $Macro.name -Status "trace" -Details "SolidWorks process detected. Using menu-dialog fallback only."
         Invoke-SolidWorksRunDialogFallback -MacroPath $macroPath
-        $usedDialogFallback = $true
-    }
-    catch {
-        if ($null -eq $primaryError) {
-            $primaryError = $_.Exception.Message
-        }
-    }
-
-    if ($usedDialogFallback) {
         return @{ startedNow = $startedNow; fallbackMode = "menu-dialog" }
     }
-
-    $extra = ""
-    if (-not [string]::IsNullOrWhiteSpace($primaryError)) {
-        $extra = "`nBlad COM: $primaryError"
+    catch {
+        $primaryError = $_.Exception.Message
     }
 
-    throw "SolidWorks nie uruchomil makra.`nKod bledu: $errorCode`nPlik: $macroPath`nModul: $($Macro.module)`nProcedura: $($Macro.procedure)$extra"
+    throw "SolidWorks nie uruchomil makra.`nPlik: $macroPath`nModul: $($Macro.module)`nProcedura: $($Macro.procedure)`nBlad: $primaryError"
 }
 
 function Show-MacroEditor {
@@ -868,8 +836,12 @@ try {
     $btnSaveConfig.Text = "Zapisz konfiguracje"; $btnSaveConfig.Left = 460; $btnSaveConfig.Top = 416; $btnSaveConfig.Width = 178; $btnSaveConfig.Height = 42
     $btnSaveConfig.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Question); $btnSaveConfig.Anchor = "Right,Bottom"
 
+    $btnShowLog = New-Object System.Windows.Forms.Button
+    $btnShowLog.Text = "Pokaz log"; $btnShowLog.Left = 460; $btnShowLog.Top = 368; $btnShowLog.Width = 178; $btnShowLog.Height = 38
+    $btnShowLog.Image = New-SystemBitmap -Icon ([System.Drawing.SystemIcons]::Information); $btnShowLog.Anchor = "Right,Bottom"
+
     Set-PrimaryButtonStyle -Button $btnRun
-    foreach ($button in @($btnOpenFile, $btnOpenFolder, $btnAdd, $btnEdit, $btnDelete, $btnSaveConfig)) {
+    foreach ($button in @($btnOpenFile, $btnOpenFolder, $btnAdd, $btnEdit, $btnDelete, $btnSaveConfig, $btnShowLog)) {
         Set-ButtonStyle -Button $button
     }
 
@@ -1064,9 +1036,24 @@ try {
         }
     })
 
+    $btnShowLog.Add_Click({
+        try {
+            $logPath = Get-MacroLogPath
+            if (-not (Test-Path -LiteralPath $logPath)) {
+                Show-Message -Text "Plik logu jeszcze nie istnieje." -Title "Brak logu" -Icon Warning
+                return
+            }
+
+            Start-Process notepad.exe -ArgumentList "`"$logPath`""
+        }
+        catch {
+            Show-Message -Text $_.Exception.Message -Title "Nie udalo sie otworzyc logu" -Icon Error
+        }
+    })
+
     foreach ($control in @($headerIcon, $headerTitle, $headerSubtitle)) { $headerPanel.Controls.Add($control) }
     foreach ($control in @($leftTitle, $listBox, $btnAdd, $btnEdit, $btnDelete)) { $leftPanel.Controls.Add($control) }
-    foreach ($control in @($detailsTitle, $detailsBox, $chkVisible, $hintLabel, $btnRun, $btnOpenFile, $btnOpenFolder, $btnSaveConfig)) { $rightPanel.Controls.Add($control) }
+    foreach ($control in @($detailsTitle, $detailsBox, $chkVisible, $hintLabel, $btnRun, $btnOpenFile, $btnOpenFolder, $btnShowLog, $btnSaveConfig)) { $rightPanel.Controls.Add($control) }
     foreach ($control in @($headerPanel, $leftPanel, $rightPanel, $statusLabel)) { $form.Controls.Add($control) }
 
     Refresh-MacroList

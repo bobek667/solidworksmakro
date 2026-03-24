@@ -14,3 +14,9 @@
 [2026-03-24 16:26:36] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
 [2026-03-24 16:26:56] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
 [2026-03-24 16:26:56] Export do PDF i DXF z rozpoznaniem - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:29:31] Rysunki do PDF i DXF v4 - Status: start - Details: Mode: attached_or_start
+[2026-03-24 16:29:31] Rysunki do PDF i DXF v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:29:34] Zapis czesci v4 - Status: start - Details: Mode: attached_only
+[2026-03-24 16:29:34] Zapis czesci v4 - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
+[2026-03-24 16:29:37] Export do PDF i DXF z rozpoznaniem - Status: start - Details: Mode: attached_only
+[2026-03-24 16:29:37] Export do PDF i DXF z rozpoznaniem - Status: error - Details: Nie mo¿na odnaleŸæ elementu. (Wyj¹tek od HRESULT: 0x8002802B (TYPE_E_ELEMENTNOTFOUND))
